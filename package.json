@@ -1,0 +1,60 @@
+{
+  "name": "food-works-customer-front",
+  "version": "0.1.0",
+  "private": true,
+  "homepage": "http://127.0.0.1:4535/customer",
+  "dependencies": {
+    "@apollo/client": "^3.2.1",
+    "@oryd/kratos-client": "^0.4.6-alpha.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "flow-bin": "^0.133.0",
+    "flow-typed": "^3.2.1",
+    "graphql": "^15.3.0",
+    "husky": "^4.2.5",
+    "lint-staged": "^10.3.0",
+    "prettier": "^2.1.1",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-router-dom": "^5.2.0",
+    "react-scripts": "3.4.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "flow": "flow",
+    "flow-typed": "flow-typed",
+    "start:local": "PORT=4535 && npm start"
+  },
+  "lint-staged": {
+    "src/**/*.{js,json,css,scss,md}": [
+      "prettier --write"
+    ]
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run flow check && lint-staged"
+    }
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "env-cmd": "^10.1.0"
+  }
+}
