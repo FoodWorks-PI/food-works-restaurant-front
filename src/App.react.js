@@ -1,28 +1,24 @@
 // @flow strict
 
 import React from 'react';
-import logo from 'logo.svg';
-import 'App.css';
-import {useState} from 'react';
-import useNetworkState from 'hooks/useNetworkState';
-import {ApolloProvider} from '@apollo/client';
-import {apiClient, GET_CURRENT_USER} from 'services/apollo';
-import {kratos} from 'services/kratos';
 import {
   BrowserRouter as Router,
-  Link,
   Route, // for later
   Switch,
 } from 'react-router-dom';
 
+import {ThemeProvider, CssBaseline, Typography} from '@material-ui/core';
+import {theme} from 'shared/theme';
+
+import {ApolloProvider} from '@apollo/client';
+import {apiClient, GET_CURRENT_USER} from 'services/apollo';
+import {kratos} from 'services/kratos';
+
+import useNetworkState from 'hooks/useNetworkState';
+
 function App() {
   const [isOnline, connectedAt] = useNetworkState();
-  const [count, setCount] = useState(0);
   const client = apiClient;
-
-  function updateCount(): void {
-    setCount(count + 1);
-  }
 
   function getSession() {
     kratos.whoami().then((result) => console.log(result));
@@ -70,27 +66,31 @@ function App() {
   function HomeDemo() {
     return (
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+        <Typography variant="h2" align="center" color="primary">
+          FOOD WORKS
+        </Typography>
         <p>{isOnline ? 'Connected' : 'Disconnected'}</p>
         {isOnline ? connectedAt?.toDateString() : null}
-        <button onClick={updateCount}>{count}</button>
       </header>
     );
   }
 
   return (
-    <ApolloProvider client={apiClient}>
-      <div className="App">
-        <Router>
-          <Switch>
-            <Route path="/home" component={HomeDemo} />
-            <Route path="/public" component={PublicDemo} />
-            <Route path="/customer/public" component={PublicDemo} />
-            <Route path="/customer/protected" component={ProtectedDemo} />
-          </Switch>
-        </Router>
-      </div>
-    </ApolloProvider>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <ApolloProvider client={apiClient}>
+        <div className="App">
+          <Router>
+            <Switch>
+              <Route path="/home" component={HomeDemo} />
+              <Route path="/public" component={PublicDemo} />
+              <Route path="/customer/public" component={PublicDemo} />
+              <Route path="/customer/protected" component={ProtectedDemo} />
+            </Switch>
+          </Router>
+        </div>
+      </ApolloProvider>
+    </ThemeProvider>
   );
 }
 
