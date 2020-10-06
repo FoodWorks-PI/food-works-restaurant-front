@@ -1,10 +1,12 @@
 {
-  "name": "food-works-customer-front",
+  "name": "food-works-restaurant-front",
   "version": "0.1.0",
   "private": true,
   "homepage": "http://127.0.0.1:4535/customer",
   "dependencies": {
     "@apollo/client": "^3.2.1",
+    "@material-ui/core": "^4.11.0",
+    "@material-ui/styles": "^4.10.0",
     "@oryd/kratos-client": "^0.4.6-alpha.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
