@@ -16,6 +16,8 @@ import {kratos} from 'services/kratos';
 
 import useNetworkState from 'hooks/useNetworkState';
 
+import RestaurantInfo from 'components/restaurant_register_info/RestaurantInfo.react';
+
 function App() {
   const [isOnline, connectedAt] = useNetworkState();
   const client = apiClient;
@@ -79,16 +81,17 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <ApolloProvider client={apiClient}>
-        <div className="App">
-          <Router>
-            <Switch>
-              <Route path="/home" component={HomeDemo} />
-              <Route path="/public" component={PublicDemo} />
-              <Route path="/customer/public" component={PublicDemo} />
-              <Route path="/customer/protected" component={ProtectedDemo} />
-            </Switch>
-          </Router>
-        </div>
+        <Router>
+          <Switch>
+            <Route path="/home" component={HomeDemo} />
+            <Route path="/public" component={PublicDemo} />
+            <Route path="/customer/public" component={PublicDemo} />
+            <Route path="/customer/protected" component={ProtectedDemo} />
+            <Route path="/restaurant/complete-profile">
+              <RestaurantInfo />
+            </Route>
+          </Switch>
+        </Router>
       </ApolloProvider>
     </ThemeProvider>
   );
