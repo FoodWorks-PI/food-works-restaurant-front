@@ -53,7 +53,7 @@ type Props = {
   owner: {
     name: string,
     lastName: string,
-    number: string,
+    phone: string,
     bankNumber: string,
   },
   values: {

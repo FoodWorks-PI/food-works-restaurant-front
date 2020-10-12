@@ -34,7 +34,7 @@ type Props = {
   values: {
     name: string,
     lastName: string,
-    number: string,
+    phone: string,
     bankNumber: string,
   },
   handleChange: (e: SyntheticInputEvent<>) => void,
@@ -93,10 +93,10 @@ function OwnerDataForm(props: Props): Node {
           />
           <TextField
             type="number"
-            name="number"
+            name="phone"
             label="Telefono"
             color="primary"
-            value={values.number}
+            value={values.phone}
             onChange={handleChange}
             required={true}
             margin="normal"

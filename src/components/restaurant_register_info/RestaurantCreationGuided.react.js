@@ -11,7 +11,11 @@ import OwnerDataForm from 'components/forms/OwnerDataForm.react';
 import RestaurantDataForm from 'components/forms/RestaurantDataForm.react';
 import RestaurantAddressForm from 'components/forms/ResturantAddressForm.react';
 import FormStepper from 'components/restaurant_register_info/FormStepper.react';
+import RestaurantConfirmation from './RestaurantConfirmation.react';
 import Alert from 'components/shared/Alert.react';
+
+import {useMutation} from '@apollo/client';
+import {NEW_RESTAURANT_OWNER} from 'services/apollo/mutations';
 
 const useStyles = makeStyles({
   root: {
@@ -35,7 +39,7 @@ const initialState = {
   owner: {
     name: '',
     lastName: '',
-    number: '',
+    phone: '',
     bankNumber: '',
   },
   restaurant: {
@@ -43,20 +47,47 @@ const initialState = {
     description: '',
     cuisine: '',
   },
-  address: '',
+  address: {
+    longitude: 1.0,
+    latitude: 2.0,
+    streetLine: 'mi calle',
+  },
 };
 
-function RestaurantInfo(): Node {
+function RestaurantCreationGuided(): Node {
   const [state, setState] = useState(initialState);
   const [activeStep, setStep] = useState(0);
   const [alertOpen, setOpen] = useState(false);
   const classes = useStyles();
+
+  const [createOwner] = useMutation(NEW_RESTAURANT_OWNER);
 
   function nextStep() {
     setStep((prevActiveStep) => prevActiveStep + 1);
   }
   function prevStep() {
     setStep((prevActiveStep) => prevActiveStep - 1);
+  }
+
+  function handleOwnerCreation(e) {
+    e.preventDefault();
+    console.log(state);
+    createOwner({
+      variables: {
+        input: {
+          name: state.owner.name,
+          lastName: state.owner.lastName,
+          phone: state.owner.lastName,
+          banking: {bankAccount: state.owner.bankNumber},
+          restaurant: {
+            name: state.restaurant.name,
+            address: {...state.address},
+            description: state.restaurant.description,
+            tags: [{name: state.restaurant.cuisine}],
+          },
+        },
+      },
+    });
   }
 
   function handleOwnerChange(e) {
@@ -114,6 +145,15 @@ function RestaurantInfo(): Node {
             address={state.address}
           />
         );
+      case 3: {
+        return (
+          <RestaurantConfirmation
+            state={state}
+            prevStep={prevStep}
+            handleOwnerCreation={handleOwnerCreation}
+          />
+        );
+      }
       default:
         break;
     }
@@ -134,4 +174,4 @@ function RestaurantInfo(): Node {
   );
 }
 
-export default RestaurantInfo;
+export default RestaurantCreationGuided;

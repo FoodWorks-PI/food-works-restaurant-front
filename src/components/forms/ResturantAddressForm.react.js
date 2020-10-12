@@ -40,7 +40,11 @@ type Props = {
     description: string,
     cuisine: string,
   },
-  address: string,
+  address: {
+    latitude: number,
+    longitude: number,
+    streetLine: string,
+  },
   handleChange: (e: SyntheticInputEvent<>) => void,
   nextStep: () => void,
   prevStep: () => void,
@@ -92,7 +96,7 @@ function RestaurantAdressForm(props: Props): Node {
             name="address"
             label="Dirección"
             color="primary"
-            value={address}
+            value={address.streetLine}
             onChange={handleChange}
             required={true}
             margin="normal"

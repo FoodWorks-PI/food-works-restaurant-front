@@ -2,7 +2,7 @@
   "name": "food-works-restaurant-front",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://127.0.0.1:4535/customer",
+  "homepage": "http://127.0.0.1:4535/restaurant",
   "dependencies": {
     "@apollo/client": "^3.2.1",
     "@material-ui/core": "^4.11.0",
@@ -31,7 +31,7 @@
     "eject": "react-scripts eject",
     "flow": "flow",
     "flow-typed": "flow-typed",
-    "start:local": "PORT=4535 && npm start"
+    "start:local": "env-cmd react-scripts start"
   },
   "lint-staged": {
     "src/**/*.{js,json,css,scss,md}": [
