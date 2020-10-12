@@ -6,6 +6,8 @@ import type {Node} from 'react';
 import {Card, CardContent, TextField, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import Button from 'components/shared/Button.react';
+import FlexLayout from 'components/shared/FlexLayout.react';
+import TextInput from 'components/shared/TextInput.react';
 
 const useStyles = makeStyles({
   card: {
@@ -14,12 +16,6 @@ const useStyles = makeStyles({
     maxHeight: '75vh',
     zIndex: 10,
   },
-  form: {
-    display: 'flex',
-    height: '100%',
-    flexDirection: 'column',
-    alignItems: 'center',
-  },
   button: {
     width: '50%',
     marginTop: '20px',
@@ -27,6 +23,12 @@ const useStyles = makeStyles({
   },
   title: {
     fontWeight: 'bold',
+  },
+  padding: {
+    padding: '1.2em',
+  },
+  input: {
+    margin: '5px 0 5px 0',
   },
 });
 
@@ -37,7 +39,7 @@ type Props = {
     phone: string,
     bankNumber: string,
   },
-  handleChange: (e: SyntheticInputEvent<>) => void,
+  handleChange: (e: SyntheticInputEvent<>) => mixed,
   nextStep: () => void,
   setOpen: (value: boolean) => void,
 };
@@ -72,48 +74,45 @@ function OwnerDataForm(props: Props): Node {
         >
           Información del dueño o admnistrador
         </Typography>
-        <div className={classes.form}>
-          <TextField
+        <FlexLayout
+          direction="vertical"
+          align="center"
+          justify="center"
+          className={classes.padding}
+        >
+          <TextInput
             name="name"
             label="Nombre"
-            color="primary"
             value={values.name}
             onChange={handleChange}
-            margin="normal"
-            required={true}
+            className={classes.input}
           />
-          <TextField
+          <TextInput
             name="lastName"
             label="Apellido"
-            color="primary"
             value={values.lastName}
             onChange={handleChange}
-            margin="normal"
-            required={true}
+            className={classes.input}
           />
-          <TextField
+          <TextInput
             type="number"
             name="phone"
             label="Telefono"
-            color="primary"
             value={values.phone}
             onChange={handleChange}
-            required={true}
-            margin="normal"
+            className={classes.input}
           />
-          <TextField
+          <TextInput
             name="bankNumber"
             label="CLABE bancaria"
-            color="primary"
             value={values.bankNumber}
             onChange={handleChange}
-            required={true}
-            margin="normal"
+            className={classes.input}
           />
           <Button className={classes.button} onClick={continueForm}>
             Continuar
           </Button>
-        </div>
+        </FlexLayout>
       </CardContent>
     </Card>
   );

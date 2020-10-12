@@ -6,6 +6,8 @@ import {Card, CardContent, TextField, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Button from 'components/shared/Button.react';
+import FlexLayout from 'components/shared/FlexLayout.react';
+import TextInput from 'components/shared/TextInput.react';
 
 const useStyles = makeStyles({
   card: {
@@ -13,11 +15,6 @@ const useStyles = makeStyles({
     width: '500px',
     maxHeight: '75vh',
     zIndex: 10,
-  },
-  form: {
-    display: 'flex',
-    height: '100%',
-    flexDirection: 'column',
   },
   button: {
     width: '40%',
@@ -43,9 +40,11 @@ const useStyles = makeStyles({
     color: 'black',
     borderBottom: '1px solid #7EA8EF',
   },
-  buttons: {
-    display: 'flex',
-    justifyContent: 'center',
+  input: {
+    margin: '5px 0 5px 0',
+  },
+  padding: {
+    padding: '1.2em',
   },
 });
 
@@ -61,7 +60,7 @@ type Props = {
     description: string,
     cuisine: string,
   },
-  handleChange: (e: SyntheticInputEvent<>) => void,
+  handleChange: (e: SyntheticInputEvent<>) => mixed,
   nextStep: () => void,
   prevStep: () => void,
   setOpen: (value: boolean) => void,
@@ -102,45 +101,44 @@ function RestaurantDataForm(props: Props): Node {
         >
           Completa la información de tu restaurante
         </Typography>
-        <div className={classes.form}>
-          <TextField
+        <FlexLayout
+          direction="vertical"
+          justify="center"
+          align="center"
+          className={classes.padding}
+        >
+          <TextInput
             name="name"
             label="Nombre del restaurante"
-            color="primary"
             value={values.name}
             onChange={handleChange}
-            required={true}
-            margin="normal"
+            className={classes.input}
           />
-          <TextField
+          <TextInput
             name="cuisine"
             label="Tipo de Cocina"
             color="primary"
             value={values.cuisine}
             onChange={handleChange}
-            required={true}
-            margin="normal"
+            className={classes.input}
           />
-          <TextField
+          <TextInput
             name="description"
             label="Descripción"
-            multiline
-            rowsMax={5}
             color="primary"
             value={values.description}
             onChange={handleChange}
-            required={true}
-            margin="normal"
+            className={classes.input}
           />
-          <div className={classes.buttons}>
-            <Button className={classes.button} onClick={previousForm}>
-              Regresar
-            </Button>
-            <Button className={classes.button} onClick={continueForm}>
-              Continuar
-            </Button>
-          </div>
-        </div>
+        </FlexLayout>
+        <FlexLayout justify="center" direction="horizontal">
+          <Button className={classes.button} onClick={previousForm}>
+            Regresar
+          </Button>
+          <Button className={classes.button} onClick={continueForm}>
+            Continuar
+          </Button>
+        </FlexLayout>
       </CardContent>
     </Card>
   );

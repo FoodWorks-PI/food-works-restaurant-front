@@ -90,7 +90,7 @@ function RestaurantCreationGuided(): Node {
     });
   }
 
-  function handleOwnerChange(e) {
+  function handleOwnerChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
     setState((prevState) => ({
@@ -98,7 +98,7 @@ function RestaurantCreationGuided(): Node {
       owner: {...prevState.owner, [name]: value},
     }));
   }
-  function handleRestaurantChange(e) {
+  function handleRestaurantChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
     setState((prevState) => ({
@@ -106,7 +106,7 @@ function RestaurantCreationGuided(): Node {
       restaurant: {...prevState.restaurant, [name]: value},
     }));
   }
-  function handleAddressChange(e) {
+  function handleAddressChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
     setState((prevState) => ({...prevState, [name]: value}));

@@ -6,6 +6,8 @@ import {Card, CardContent, TextField, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Button from 'components/shared/Button.react';
+import FlexLayout from 'components/shared/FlexLayout.react';
+import TextInput from 'components/shared/TextInput.react';
 
 const useStyles = makeStyles({
   card: {
@@ -13,11 +15,6 @@ const useStyles = makeStyles({
     width: '500px',
     maxHeight: '75vh',
     zIndex: 10,
-  },
-  form: {
-    display: 'flex',
-    height: '100%',
-    flexDirection: 'column',
   },
   button: {
     width: '40%',
@@ -32,6 +29,12 @@ const useStyles = makeStyles({
     display: 'flex',
     justifyContent: 'center',
   },
+  padding: {
+    padding: '1.2em',
+  },
+  input: {
+    margin: '5px 0 5px 0',
+  },
 });
 
 type Props = {
@@ -45,7 +48,7 @@ type Props = {
     longitude: number,
     streetLine: string,
   },
-  handleChange: (e: SyntheticInputEvent<>) => void,
+  handleChange: (e: SyntheticInputEvent<>) => mixed,
   nextStep: () => void,
   prevStep: () => void,
   setOpen: (value: boolean) => void,
@@ -91,26 +94,23 @@ function RestaurantAdressForm(props: Props): Node {
         >
           Busca la direccion de tu restaurante
         </Typography>
-        <div className={classes.form}>
-          <TextField
+        <FlexLayout direction="vertical" justify="center" className={classes.padding}>
+          <TextInput
             name="address"
             label="Dirección"
-            color="primary"
             value={address.streetLine}
             onChange={handleChange}
-            required={true}
-            margin="normal"
-            type="search"
+            type="text"
           />
-          <div className={classes.buttons}>
-            <Button className={classes.button} onClick={previousForm}>
-              Regresar
-            </Button>
-            <Button className={classes.button} onClick={continueForm}>
-              Continuar
-            </Button>
-          </div>
-        </div>
+        </FlexLayout>
+        <FlexLayout direction="horizontal" justify="center">
+          <Button className={classes.button} onClick={previousForm}>
+            Regresar
+          </Button>
+          <Button className={classes.button} onClick={continueForm}>
+            Continuar
+          </Button>
+        </FlexLayout>
       </CardContent>
     </Card>
   );
