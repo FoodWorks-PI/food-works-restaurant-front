@@ -1,5 +1,7 @@
 // @flow strict
 
+import type {Node} from 'react';
+
 import React, {useEffect, useState} from 'react';
 import {
   BrowserRouter as Router,
@@ -24,16 +26,40 @@ import Button from 'components/shared/Button.react';
 
 const client = apiClient;
 
+type Owner = {
+  name: string,
+  lastName: string,
+  phone: string,
+  email: string,
+  banking: {
+    bankNumber: string,
+  },
+};
+
+type Session = {
+  authenticatedAt: string,
+  expiresAt: string,
+  identity: {
+    id: string,
+    verifiableAddresses: [
+      {
+        verified: boolean,
+        value: string,
+      },
+    ],
+  },
+};
+
 function getOwner() {
   return client.query({
     query: GET_CURRENT_OWNER,
   });
 }
 
-function App() {
+function App(): Node {
   const [isOnline, connectedAt] = useNetworkState();
-  const [currentOwner, setOwner] = useState(undefined);
-  const [activeSession, setSession] = useState(undefined);
+  const [currentOwner, setOwner] = useState<?Owner>(undefined);
+  const [activeSession, setSession] = useState<?Session>(undefined);
   const [isLoading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -41,7 +67,7 @@ function App() {
       .whoami()
       .then((result) => {
         console.log(result);
-        setSession(result);
+        setSession(result.body);
         setLoading(false);
       })
       .catch((error) => {
@@ -73,12 +99,12 @@ function App() {
   function PublicDemo() {
     return (
       <FlexLayout justify="around">
-        <Button>
+        <Button onClick={(e) => console.log(e)}>
           <a href="https://127.0.0.1:4455/auth/registration?clientApp=https://127.0.1:4455/restaurant/protected">
             Register
           </a>
         </Button>
-        <Button>
+        <Button onClick={(e) => console.log(e)}>
           <a href="https://127.0.0.1:4455/auth/login?clientApp=https://127.0.0.1:4455/restaurant/protected">
             Login
           </a>
@@ -104,17 +130,16 @@ function App() {
   }
 
   function Dashboard() {
-    const verified =
-      activeSession.response.body.identity.verifiable_addresses[0].verified;
+    const verified = activeSession?.identity?.verifiableAddresses[0].verified;
     return (
       <div>
         <Typography variant="h2" align="center" color="primary">
           FOOD WORKS - HOME
         </Typography>
         <Typography variant="body1" align="center" color="secondary">
-          Owner, {currentOwner.name} {currentOwner.phone}
+          Owner, {currentOwner?.name} {currentOwner?.phone}
           <br />
-          Email, {currentOwner.email}
+          Email, {currentOwner?.email}
         </Typography>
         <Typography variant="h5" align="center" color="secondary">
           {verified
@@ -159,6 +184,7 @@ function App() {
             <Route path="/restaurant/public" component={PublicDemo} />
             <Route path="/restaurant/protected" component={ProtectedDemo} />
             <Route path="/restaurant/dashboard" component={Dashboard} />
+            <Route path="/restaurant/forms" component={RestaurantCreationGuided} />
           </Switch>
         </Router>
       </ApolloProvider>

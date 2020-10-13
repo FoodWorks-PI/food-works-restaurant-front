@@ -63,7 +63,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-type TextInputType = 'text' | 'password' | 'email' | 'tel' | 'search';
+type TextInputType = 'text' | 'password' | 'email' | 'tel' | 'search' | 'number';
 
 type Props = $ReadOnly<{
   className?: ?string,
