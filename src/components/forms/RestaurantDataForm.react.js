@@ -2,7 +2,7 @@
 
 import React from 'react';
 import type {Node} from 'react';
-import {Card, CardContent, TextField, Typography} from '@material-ui/core';
+import {Card, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Button from 'components/shared/Button.react';

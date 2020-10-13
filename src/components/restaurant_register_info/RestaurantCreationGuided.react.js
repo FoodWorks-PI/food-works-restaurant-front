@@ -16,6 +16,7 @@ import Alert from 'components/shared/Alert.react';
 
 import {useMutation} from '@apollo/client';
 import {NEW_RESTAURANT_OWNER} from 'services/apollo/mutations';
+import {Redirect, useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -61,6 +62,7 @@ function RestaurantCreationGuided(): Node {
   const classes = useStyles();
 
   const [createOwner] = useMutation(NEW_RESTAURANT_OWNER);
+  let history = useHistory();
 
   function nextStep() {
     setStep((prevActiveStep) => prevActiveStep + 1);
@@ -87,7 +89,16 @@ function RestaurantCreationGuided(): Node {
           },
         },
       },
-    });
+    })
+      .then((result) => {
+        console.log('Created owner successfully');
+        console.log(result);
+        history.push('/restaurant/dashboard');
+      })
+      .catch((error) => {
+        console.log('Error creating owner');
+        console.log(error);
+      });
   }
 
   function handleOwnerChange(e: SyntheticInputEvent<>) {
