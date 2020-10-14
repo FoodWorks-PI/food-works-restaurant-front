@@ -46,17 +46,22 @@ type Props = {
       description: string,
       cuisine: string,
     },
-    address: {
-      longitude: number,
-      latitude: number,
-      streetLine: string,
-    },
+  },
+  address: {
+    longitude: number,
+    latitude: number,
+    streetLine: string,
   },
   handleOwnerCreation: (e: SyntheticMouseEvent<>) => void,
   prevStep: () => void,
 };
 
-function RestaurantConfirmation({state, handleOwnerCreation, prevStep}: Props): Node {
+function RestaurantConfirmation({
+  state,
+  address,
+  handleOwnerCreation,
+  prevStep,
+}: Props): Node {
   const classes = useStyles();
 
   return (
@@ -96,7 +101,7 @@ function RestaurantConfirmation({state, handleOwnerCreation, prevStep}: Props): 
             {state.restaurant.description}
           </Typography>
           <Typography display="block" variant="body2" color="secondary">
-            {state.address.streetLine}
+            {address.streetLine}
           </Typography>
           <div className={classes.buttons}>
             <Button onClick={prevStep} className={classes.button}>

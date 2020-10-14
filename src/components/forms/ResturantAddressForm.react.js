@@ -1,6 +1,6 @@
 // @flow strict
 
-import React from 'react';
+import React, {useState} from 'react';
 import type {Node} from 'react';
 import {Card, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
@@ -8,6 +8,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import Button from 'components/shared/Button.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import TextInput from 'components/shared/TextInput.react';
+
+import useInitialGeoPosition from 'hooks/useInitialGeoPosition';
 
 const useStyles = makeStyles({
   card: {
@@ -43,35 +45,41 @@ type Props = {
     description: string,
     cuisine: string,
   },
-  address: {
-    latitude: number,
-    longitude: number,
-    streetLine: string,
-  },
+  street: string,
   handleChange: (e: SyntheticInputEvent<>) => mixed,
+  setCoords: (latitude: number, longitude: number) => void,
   nextStep: () => void,
   prevStep: () => void,
   setOpen: (value: boolean) => void,
 };
 
 function RestaurantAdressForm(props: Props): Node {
-  console.log(props);
-  const {address, handleChange} = props;
+  const {handleChange, street, setCoords} = props;
   const classes = useStyles();
-
-  function handleAddressSearch(e) {
-    e.preventDefault();
-  }
+  const [position, posError, isFetching] = useInitialGeoPosition();
 
   function continueForm(e) {
     e.preventDefault();
-    const valid = address !== '';
-    valid ? props.nextStep() : props.setOpen(true);
+    if (street !== '' && position) {
+      props.nextStep();
+      setCoords(position.coords.latitude, position.coords.longitude);
+    } else if (posError) {
+      props.setOpen(true);
+      console.log(posError);
+    } else {
+      props.setOpen(true);
+    }
   }
 
   function previousForm(e) {
     e.preventDefault();
     props.prevStep();
+  }
+
+  if (posError && !isFetching) {
+    window.alert('Acepta los permisos de ubicacion');
+  } else if (!isFetching) {
+    console.log(position);
   }
 
   return (
@@ -92,13 +100,14 @@ function RestaurantAdressForm(props: Props): Node {
           color="secondary"
           align="center"
         >
-          Busca la direccion de tu restaurante
+          Acepta los permisos de ubicacion e ingresa tu calle
         </Typography>
         <FlexLayout direction="vertical" justify="center" className={classes.padding}>
           <TextInput
-            name="address"
-            label="Dirección"
-            value={address.streetLine}
+            name="streetLine"
+            placeholder="Calle Hidalgo"
+            label="Nombre de la calle"
+            value={street}
             onChange={handleChange}
             type="text"
           />

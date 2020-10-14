@@ -16,7 +16,7 @@ import Alert from 'components/shared/Alert.react';
 
 import {useMutation} from '@apollo/client';
 import {NEW_RESTAURANT_OWNER} from 'services/apollo/mutations';
-import {Redirect, useHistory} from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 const useStyles = makeStyles({
   root: {
@@ -48,15 +48,16 @@ const initialState = {
     description: '',
     cuisine: '',
   },
-  address: {
-    longitude: 1.0,
-    latitude: 2.0,
-    streetLine: 'mi calle',
-  },
+};
+const initialAddress = {
+  streetLine: '',
+  longitude: 0.0,
+  latitude: 0.0,
 };
 
 function RestaurantCreationGuided(): Node {
   const [state, setState] = useState(initialState);
+  const [address, setAddress] = useState(initialAddress);
   const [activeStep, setStep] = useState(0);
   const [alertOpen, setOpen] = useState(false);
   const classes = useStyles();
@@ -73,7 +74,7 @@ function RestaurantCreationGuided(): Node {
 
   function handleOwnerCreation(e) {
     e.preventDefault();
-    console.log(state);
+    console.log(state, address);
     createOwner({
       variables: {
         input: {
@@ -83,7 +84,7 @@ function RestaurantCreationGuided(): Node {
           banking: {bankAccount: state.owner.bankNumber},
           restaurant: {
             name: state.restaurant.name,
-            address: {...state.address},
+            address: {...address},
             description: state.restaurant.description,
             tags: [{name: state.restaurant.cuisine}],
           },
@@ -117,10 +118,22 @@ function RestaurantCreationGuided(): Node {
       restaurant: {...prevState.restaurant, [name]: value},
     }));
   }
-  function handleAddressChange(e: SyntheticInputEvent<>) {
+
+  function handleStreetLineChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
-    setState((prevState) => ({...prevState, [name]: value}));
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      [name]: value,
+    }));
+  }
+
+  function setCoords(latitude: number, longitude: number) {
+    setAddress((prevAddress) => ({
+      ...prevAddress,
+      latitude,
+      longitude,
+    }));
   }
 
   function getForm() {
@@ -152,14 +165,16 @@ function RestaurantCreationGuided(): Node {
             nextStep={nextStep}
             prevStep={prevStep}
             setOpen={setOpen}
-            handleChange={handleAddressChange}
-            address={state.address}
+            street={address.streetLine}
+            setCoords={setCoords}
+            handleChange={handleStreetLineChange}
           />
         );
       case 3: {
         return (
           <RestaurantConfirmation
             state={state}
+            address={address}
             prevStep={prevStep}
             handleOwnerCreation={handleOwnerCreation}
           />
