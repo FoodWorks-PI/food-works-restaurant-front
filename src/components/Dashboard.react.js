@@ -8,8 +8,8 @@ import {makeStyles} from '@material-ui/core/styles';
 import {Typography, Fab} from '@material-ui/core';
 import {Add} from '@material-ui/icons';
 import Sidebar from 'components/shared/Sidebar.react';
-import FlexLayout from './shared/FlexLayout.react';
-import CreateProductDialog from './create_product/CreateProductDialog.react';
+import FlexLayout from 'components/shared/FlexLayout.react';
+import CreateProductDialog from 'components/create_product/CreateProductDialog.react';
 
 const useStyles = makeStyles({
   root: {

@@ -45,6 +45,24 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+const items = [
+  {
+    name: 'Inicio',
+    icon: Home,
+    route: '/restaurant/protected/dashboard',
+  },
+  {
+    name: 'Menú',
+    icon: RestaurantMenu,
+    route: '/restaurant/protected/products',
+  },
+  {
+    name: 'Cuenta',
+    icon: Person,
+    route: '/restaurant/protected/account',
+  },
+];
+
 function Sidebar(): Node {
   const location = useLocation();
   const classes = useStyles();
@@ -67,29 +85,20 @@ function Sidebar(): Node {
       </div>
       <Divider />
       <List component="nav">
-        <ListItem
-          button
-          to="/restaurant/protected/dashboard"
-          component={NavLink}
-          selected={isActive('/restaurant/protected/dashboard')}
-        >
-          <ListItemIcon className={classes.icon}>
-            <Home />
-          </ListItemIcon>
-          <ListItemText primary="Inicio" />
-        </ListItem>
-        <ListItem button to="/restaurant/protected/products" component={NavLink}>
-          <ListItemIcon className={classes.icon}>
-            <RestaurantMenu />
-          </ListItemIcon>
-          <ListItemText primary="Menú" />
-        </ListItem>
-        <ListItem button to="/restaurant/protected/account" component={NavLink}>
-          <ListItemIcon className={classes.icon}>
-            <Person />
-          </ListItemIcon>
-          <ListItemText primary="Cuenta" />
-        </ListItem>
+        {items.map((item, ndx) => (
+          <ListItem
+            key={ndx}
+            button
+            to={item.route}
+            component={NavLink}
+            selected={isActive(item.route)}
+          >
+            <ListItemIcon className={classes.icon}>
+              <item.icon />
+            </ListItemIcon>
+            <ListItemText primary={item.name} />
+          </ListItem>
+        ))}
       </List>
     </Drawer>
   );
