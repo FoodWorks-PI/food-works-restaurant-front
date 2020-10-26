@@ -36,6 +36,13 @@ type Props = {
     email: string,
   },
 };
+type Product = {
+  name: string,
+  description: string,
+  price: number,
+  tags: string[],
+  isActive: boolean,
+};
 
 function Dashboard({owner}: Props): Node {
   const classes = useStyles();
@@ -46,6 +53,11 @@ function Dashboard({owner}: Props): Node {
   }
   function closeDialog() {
     setOpen(false);
+  }
+
+  function handleProductCreation(product: Product) {
+    product.price = parseInt(product.price);
+    console.log(product);
   }
 
   return (
@@ -63,7 +75,11 @@ function Dashboard({owner}: Props): Node {
           <Add />
         </Fab>
       </FlexLayout>
-      <CreateProductDialog isOpen={isOpen} closeDialog={closeDialog} />
+      <CreateProductDialog
+        isOpen={isOpen}
+        closeDialog={closeDialog}
+        createProduct={handleProductCreation}
+      />
     </FlexLayout>
   );
 }
