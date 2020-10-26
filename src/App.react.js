@@ -20,6 +20,7 @@ import {Provider} from 'react-redux';
 import RestaurantStore from 'stores/RestaurantStore';
 
 import Dashboard from 'components/Dashboard.react';
+import Menu from 'components/restaurant_menu/Menu.react';
 import Landing from 'components/landing/Landing.react';
 
 function App(): Node {
@@ -33,6 +34,9 @@ function App(): Node {
               <Route exact path="/restaurant" component={Landing} />
               <Route path="/restaurant/protected/dashboard">
                 <Dashboard />
+              </Route>
+              <Route path="/restaurant/protected/products">
+                <Menu />
               </Route>
             </Switch>
           </Router>
