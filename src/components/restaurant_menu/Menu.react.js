@@ -5,6 +5,7 @@ import type {Node} from 'react';
 import React, {useState, useEffect} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
+import {Typography} from '@material-ui/core';
 import Sidebar from 'components/shared/Sidebar.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import ProductCard from 'components/restaurant_menu/ProductCard.react';
@@ -66,7 +67,13 @@ function Menu(): Node {
     }
   }, [owner, getAllProducts]);
 
-  if (loading) return 'Loading...';
+  if (loading) {
+    return (
+      <Typography variant="h2" align="center" color="primary">
+        CARGANDO...
+      </Typography>
+    );
+  }
 
   if (error) return <ErrorPage>Error con la API</ErrorPage>;
 
@@ -118,7 +125,11 @@ function Menu(): Node {
     );
   }
 
-  return 'Loading...';
+  return (
+    <Typography variant="h2" align="center" color="primary">
+      CARGANDO...
+    </Typography>
+  );
 }
 
 export default Menu;

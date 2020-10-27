@@ -123,7 +123,11 @@ function Dashboard(): Node {
       </FlexLayout>
     );
   } else {
-    return 'Loading....';
+    return (
+      <Typography variant="h2" align="center" color="primary">
+        CARGANDO...
+      </Typography>
+    );
   }
 }
 
