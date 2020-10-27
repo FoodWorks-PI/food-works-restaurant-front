@@ -13,20 +13,13 @@ const useStyles = makeStyles({
     width: '100%',
     height: '50%',
     padding: '5px 0 5px 0',
-    margin: '10px 0 10px 0',
   },
 });
 
 function ProductsRow(): Node {
   const classes = useStyles();
 
-  return (
-    <FlexLayout className={classes.root} wrap="wrap">
-      <ProductCard />
-      <ProductCard />
-      <ProductCard />
-    </FlexLayout>
-  );
+  return <FlexLayout className={classes.root} wrap="wrap"></FlexLayout>;
 }
 
 export default ProductsRow;

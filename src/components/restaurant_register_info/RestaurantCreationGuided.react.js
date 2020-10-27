@@ -86,7 +86,7 @@ function RestaurantCreationGuided(): Node {
             name: state.restaurant.name,
             address: {...address},
             description: state.restaurant.description,
-            tags: [{name: state.restaurant.cuisine}],
+            tags: [state.restaurant.cuisine],
           },
         },
       },

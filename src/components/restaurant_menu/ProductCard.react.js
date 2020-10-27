@@ -7,31 +7,28 @@ import {makeStyles} from '@material-ui/core/styles';
 
 import {Typography, Paper, Chip, Checkbox, FormControlLabel} from '@material-ui/core';
 import FlexLayout from 'components/shared/FlexLayout.react';
+import Button from 'components/shared/Button.react';
 
-import donuts from 'assets/donuts.jpg';
+import donuts from 'assets/placeholder.png';
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme) => ({
   root: {
-    flex: '0 0 30%',
-    margin: 10,
-    minWidth: 300,
-  },
-  img: (props) => ({
     width: '100%',
-    height: '200px',
-    objectFit: 'cover',
+    margin: '10px 0',
+  },
+  img: ({img}) => ({
+    flex: '0 0 33.333%',
+    height: 200,
     backgroundRepeat: 'no-repeat',
-    backgroundPosition: 'center',
-    backgroundSize: '100%',
-    backgroundImage: `url(${props.product.img})`,
+    backgroundSize: 'cover',
+    backgroundImage: `url(${img})`,
   }),
   title: {
-    color: 'white',
     fontWeight: 'bold',
-    paddingLeft: 3,
     width: '100%',
   },
   content: {
+    flex: '0 0 66.666%',
     width: '100%',
     padding: '8px',
   },
@@ -46,32 +43,60 @@ const useStyles = makeStyles({
   checkbox: {
     marginRight: 0,
   },
-});
+  buttons: {
+    width: '100%',
+    flexGrow: 3,
+    alignItems: 'flex-end',
+  },
+  buttonEdit: {
+    backgroundColor: theme.palette.secondary.main,
+    marginRight: 8,
+    fontSize: 13,
+  },
+  buttonDelete: {
+    backgroundColor: theme.palette.error.main,
+    fontSize: 13,
+  },
+}));
 
-const product = {
-  id: 0,
-  name: 'donas',
-  isActive: true,
-  price: 50.0,
-  description: 'Ricas donas',
-  tags: ['mexicana', 'asiatica'],
-  img: donuts,
+// const product = {
+//   id: 0,
+//   name: 'Donas',
+//   isActive: true,
+//   price: 50.0,
+//   description: 'ricas donas de muchos sabores',
+//   tags: ['postres', 'dulce'],
+//   img: donuts,
+// };
+
+type Props = {
+  product: {
+    ID: number,
+    name: string,
+    description: string,
+    isActive: boolean,
+    cost: number,
+    tags: [{name: string}],
+  },
+  handleClick: (e: SyntheticMouseEvent<>) => mixed,
 };
 
-function ProductCard(): Node {
-  const classes = useStyles({product});
+function ProductCard({product, handleClick}: Props): Node {
+  const img = donuts;
+  const classes = useStyles({img});
 
   return (
     <Paper elevation={3} className={classes.root} square>
-      <FlexLayout direction="vertical" justify="center">
-        <FlexLayout className={classes.img} direction="vertical-reverse">
+      <FlexLayout wrap="wrap" align="stretch">
+        <FlexLayout className={classes.img}></FlexLayout>
+        <FlexLayout className={classes.content} direction="vertical">
           <Typography variant="h4" className={classes.title}>
             {product.name}
           </Typography>
-        </FlexLayout>
-        <FlexLayout className={classes.content} direction="vertical">
           <FlexLayout align="center" justify="between" className={classes.fullRow}>
-            <Typography variant="subtitle1">{product.description}</Typography>
+            <Typography variant="subtitle1" align="justify">
+              {product.description}
+            </Typography>
             <FormControlLabel
               className={classes.checkbox}
               control={
@@ -84,7 +109,7 @@ function ProductCard(): Node {
             <FlexLayout>
               {product.tags.map((tag, ndx) => (
                 <Chip
-                  label={tag}
+                  label={tag.name}
                   key={ndx}
                   color="primary"
                   size="small"
@@ -93,8 +118,16 @@ function ProductCard(): Node {
               ))}
             </FlexLayout>
             <Typography variant="h6" color="primary" align="right">
-              ${product.price}
+              ${product.cost / 1000}
             </Typography>
+          </FlexLayout>
+          <FlexLayout justify="end" className={classes.buttons}>
+            <Button className={classes.buttonEdit} onClick={handleClick}>
+              Editar
+            </Button>
+            <Button className={classes.buttonDelete} onClick={handleClick}>
+              Eliminar
+            </Button>
           </FlexLayout>
         </FlexLayout>
       </FlexLayout>

@@ -11,10 +11,12 @@ import {
   Divider,
   Typography,
   Drawer,
+  Hidden,
 } from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 import {Home, Person, RestaurantMenu} from '@material-ui/icons';
 import {NavLink, useLocation} from 'react-router-dom';
+import clsx from 'clsx';
 
 import logo from 'assets/logo/logo.svg';
 
@@ -42,6 +44,17 @@ const useStyles = makeStyles((theme) => ({
   },
   icon: {
     color: 'white',
+  },
+  drawerClose: {
+    transition: theme.transitions.create('width', {
+      easing: theme.transitions.easing.sharp,
+      duration: theme.transitions.duration.leavingScreen,
+    }),
+    overflowX: 'hidden',
+    width: theme.spacing(7) + 1,
+    [theme.breakpoints.up('sm')]: {
+      width: theme.spacing(9) + 1,
+    },
   },
 }));
 
@@ -72,35 +85,70 @@ function Sidebar(): Node {
   }
 
   return (
-    <Drawer
-      variant="permanent"
-      className={classes.root}
-      classes={{
-        paper: classes.drawerPaper,
-      }}
-    >
-      <div className={classes.drawerHeader}>
-        <img alt="logo" src={logo} className={classes.logo} />
-        <Typography variant="h5">FOOD WORKS</Typography>
-      </div>
-      <Divider />
-      <List component="nav">
-        {items.map((item, ndx) => (
-          <ListItem
-            key={ndx}
-            button
-            to={item.route}
-            component={NavLink}
-            selected={isActive(item.route)}
-          >
-            <ListItemIcon className={classes.icon}>
-              <item.icon />
-            </ListItemIcon>
-            <ListItemText primary={item.name} />
-          </ListItem>
-        ))}
-      </List>
-    </Drawer>
+    <>
+      <Hidden mdUp implementation="css">
+        <Drawer
+          variant="permanent"
+          className={clsx(classes.root, classes.drawerClose)}
+          classes={{
+            paper: clsx(classes.drawerPaper, classes.drawerClose),
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <img alt="logo" src={logo} className={classes.logo} />
+            <Typography variant="h5">FOOD WORKS</Typography>
+          </div>
+          <Divider />
+          <List component="nav">
+            {items.map((item, ndx) => (
+              <ListItem
+                key={ndx}
+                button
+                to={item.route}
+                component={NavLink}
+                selected={isActive(item.route)}
+              >
+                <ListItemIcon className={classes.icon}>
+                  <item.icon />
+                </ListItemIcon>
+                <ListItemText primary={item.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </Hidden>
+      <Hidden smDown implementation="css">
+        <Drawer
+          variant="permanent"
+          className={classes.root}
+          classes={{
+            paper: classes.drawerPaper,
+          }}
+        >
+          <div className={classes.drawerHeader}>
+            <img alt="logo" src={logo} className={classes.logo} />
+            <Typography variant="h5">FOOD WORKS</Typography>
+          </div>
+          <Divider />
+          <List component="nav">
+            {items.map((item, ndx) => (
+              <ListItem
+                key={ndx}
+                button
+                to={item.route}
+                component={NavLink}
+                selected={isActive(item.route)}
+              >
+                <ListItemIcon className={classes.icon}>
+                  <item.icon />
+                </ListItemIcon>
+                <ListItemText primary={item.name} />
+              </ListItem>
+            ))}
+          </List>
+        </Drawer>
+      </Hidden>
+    </>
   );
 }
 

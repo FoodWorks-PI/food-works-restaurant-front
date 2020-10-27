@@ -2,7 +2,7 @@
 
 import type {Node} from 'react';
 
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import {Typography, Fab} from '@material-ui/core';
@@ -28,14 +28,6 @@ const useStyles = makeStyles({
   },
 });
 
-type Props = {
-  owner?: {
-    name: string,
-    phone: string,
-    lastName: string,
-    email: string,
-  },
-};
 type Product = {
   name: string,
   description: string,
@@ -44,9 +36,26 @@ type Product = {
   isActive: boolean,
 };
 
-function Dashboard({owner}: Props): Node {
+type Owner = {
+  ID: number,
+  email: string,
+  name: string,
+  restaurant: {
+    ID: number,
+    name: string,
+  },
+};
+
+function Dashboard(): Node {
   const classes = useStyles();
   const [isOpen, setOpen] = useState(false);
+  const [data, setData] = useState(null);
+
+  useEffect(() => {
+    const local = localStorage.getItem('owner');
+    const owner = local ? JSON.parse(local) : null;
+    setData(owner);
+  }, []);
 
   function openDialog() {
     setOpen(true);
@@ -60,28 +69,37 @@ function Dashboard({owner}: Props): Node {
     console.log(product);
   }
 
-  return (
-    <FlexLayout>
-      <Sidebar />
-      <FlexLayout direction="vertical" className={classes.content}>
-        <Typography>Hello</Typography>
-        <Fab
-          color="primary"
-          aria-label="add"
-          size="medium"
-          className={classes.fab}
-          onClick={openDialog}
-        >
-          <Add />
-        </Fab>
+  if (data) {
+    return (
+      <FlexLayout>
+        <Sidebar />
+        <FlexLayout direction="vertical" className={classes.content}>
+          <Typography variant="h4" color="primary">
+            Hola! {data.name}
+          </Typography>
+          <Typography variant="subtitle1" color="secondary">
+            Bienvienido a tu restaurante "{data.restaurant.name}"
+          </Typography>
+          <Fab
+            color="primary"
+            aria-label="add"
+            size="medium"
+            className={classes.fab}
+            onClick={openDialog}
+          >
+            <Add />
+          </Fab>
+        </FlexLayout>
+        <CreateProductDialog
+          isOpen={isOpen}
+          closeDialog={closeDialog}
+          createProduct={handleProductCreation}
+        />
       </FlexLayout>
-      <CreateProductDialog
-        isOpen={isOpen}
-        closeDialog={closeDialog}
-        createProduct={handleProductCreation}
-      />
-    </FlexLayout>
-  );
+    );
+  } else {
+    return 'Loading....';
+  }
 }
 
 export default Dashboard;

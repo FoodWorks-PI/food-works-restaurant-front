@@ -16,11 +16,14 @@ function RestaurantCreatedRedirect(): Node {
   if (loading) return 'Loading...';
   if (error) return <RestaurantCreationGuided />;
 
+  if (data) {
+    localStorage.setItem('owner', JSON.stringify(data.getCurrentRestaurantOwner));
+  }
+
   return (
     <Redirect
       to={{
         pathname: '/restaurant/protected/dashboard',
-        state: {owner: data},
       }}
     />
   );
