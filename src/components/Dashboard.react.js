@@ -11,6 +11,10 @@ import Sidebar from 'components/shared/Sidebar.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import CreateProductDialog from 'components/create_product/CreateProductDialog.react';
 
+import {useMutation} from '@apollo/client';
+import {NEW_PRODUCT} from 'services/apollo/mutations';
+import {useHistory} from 'react-router-dom';
+
 const useStyles = makeStyles({
   root: {
     display: 'flex',
@@ -31,9 +35,10 @@ const useStyles = makeStyles({
 type Product = {
   name: string,
   description: string,
-  price: number,
+  cost: number,
   tags: string[],
-  isActive: boolean,
+  active: boolean,
+  restaurantID: ?number,
 };
 
 type Owner = {
@@ -49,12 +54,14 @@ type Owner = {
 function Dashboard(): Node {
   const classes = useStyles();
   const [isOpen, setOpen] = useState(false);
-  const [data, setData] = useState(null);
+  const [ownerData, setOwnerData] = useState<?Owner>(null);
+  const [createProduct] = useMutation(NEW_PRODUCT);
+  const history = useHistory();
 
   useEffect(() => {
     const local = localStorage.getItem('owner');
     const owner = local ? JSON.parse(local) : null;
-    setData(owner);
+    setOwnerData(owner);
   }, []);
 
   function openDialog() {
@@ -65,20 +72,38 @@ function Dashboard(): Node {
   }
 
   function handleProductCreation(product: Product) {
-    product.price = parseInt(product.price);
     console.log(product);
+    // Change to cents
+    product.cost = parseInt(product.cost) * 100;
+    product.restaurantID = ownerData?.restaurant?.ID;
+    createProduct({
+      variables: {
+        input: {
+          ...product,
+        },
+      },
+    })
+      .then((result) => {
+        console.log('Created product successfully');
+        console.log(result);
+        history.push('/restaurant/protected/products');
+      })
+      .catch((error) => {
+        console.log('Error creating owner');
+        console.log(error);
+      });
   }
 
-  if (data) {
+  if (ownerData) {
     return (
       <FlexLayout>
         <Sidebar />
         <FlexLayout direction="vertical" className={classes.content}>
           <Typography variant="h4" color="primary">
-            Hola! {data.name}
+            Hola! {ownerData.name}
           </Typography>
           <Typography variant="subtitle1" color="secondary">
-            Bienvienido a tu restaurante "{data.restaurant.name}"
+            Bienvienido a tu restaurante "{ownerData.restaurant.name}"
           </Typography>
           <Fab
             color="primary"

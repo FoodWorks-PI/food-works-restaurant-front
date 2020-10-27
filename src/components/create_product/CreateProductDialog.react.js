@@ -45,14 +45,18 @@ const useStyles = makeStyles({
     margin: 0,
     fontSize: 12,
   },
+  button: {
+    backgroundColor: '#ccc',
+  },
 });
 
 type Product = {
   name: string,
   description: string,
-  price: number,
+  cost: number,
   tags: string[],
-  isActive: boolean,
+  active: boolean,
+  restaurantID: ?number,
 };
 
 type Props = {
@@ -64,9 +68,10 @@ type Props = {
 const initialState = {
   name: '',
   description: '',
-  price: 0,
+  cost: 0,
   tags: [''],
-  isActive: true,
+  active: true,
+  restaurantID: null,
 };
 
 function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node {
@@ -104,9 +109,9 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
   }
   function arrayChange(e, ndx) {
     const {name, value} = e.target;
-    let ings = [...product[name]];
-    ings[ndx] = value;
-    setProduct((prevProduct) => ({...prevProduct, [name]: ings}));
+    let tags = [...product[name]];
+    tags[ndx] = value;
+    setProduct((prevProduct) => ({...prevProduct, [name]: tags}));
   }
 
   function handleSubmit() {
@@ -162,8 +167,8 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
             variant="outlined"
             label="Precio Unitario"
             type="number"
-            name="price"
-            value={product.price}
+            name="cost"
+            value={product.cost}
             onChange={handleChange}
             placeholder="50"
             size="small"
@@ -178,9 +183,9 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={product.isActive}
+                    checked={product.active}
                     onChange={handleChange}
-                    name="isActive"
+                    name="active"
                     color="primary"
                   />
                 }
@@ -210,7 +215,9 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
       </DialogContent>
       <DialogActions className={classes.buttons}>
         <Button onClick={handleSubmit}>Crear</Button>
-        <Button onClick={closeDialog}>Cancelar</Button>
+        <Button onClick={closeDialog} className={classes.button}>
+          Cancelar
+        </Button>
       </DialogActions>
     </Dialog>
   );

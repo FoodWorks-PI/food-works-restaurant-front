@@ -118,7 +118,7 @@ function ProductCard({product, handleClick}: Props): Node {
               ))}
             </FlexLayout>
             <Typography variant="h6" color="primary" align="right">
-              ${product.cost / 1000}
+              ${product.cost / 100}
             </Typography>
           </FlexLayout>
           <FlexLayout justify="end" className={classes.buttons}>
