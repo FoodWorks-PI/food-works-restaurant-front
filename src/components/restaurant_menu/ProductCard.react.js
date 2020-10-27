@@ -78,13 +78,27 @@ type Props = {
     cost: number,
     tags: [{name: string}],
   },
-  handleClick: (e: SyntheticMouseEvent<>) => mixed,
+  deleteProduct: (ID: number) => mixed,
   toggleStatus: (ID: number) => void,
 };
 
-function ProductCard({product, handleClick, toggleStatus}: Props): Node {
+function ProductCard({product, deleteProduct, toggleStatus}: Props): Node {
   const img = donuts;
   const classes = useStyles({img});
+
+  function handleClick() {
+    console.log('placeholder');
+  }
+
+  function handleDelete(e: SyntheticMouseEvent<>) {
+    e.preventDefault();
+    const confirmDeletion = window.confirm('¿Seguro que deseas eliminar el producto?');
+    if (!confirmDeletion) {
+      return;
+    } else {
+      deleteProduct(product.ID);
+    }
+  }
 
   return (
     <Paper elevation={3} className={classes.root} square>
@@ -131,7 +145,11 @@ function ProductCard({product, handleClick, toggleStatus}: Props): Node {
             <Button className={classes.buttonEdit} onClick={handleClick}>
               Editar
             </Button>
-            <Button className={classes.buttonDelete} onClick={handleClick}>
+            <Button
+              className={classes.buttonDelete}
+              onClick={handleDelete}
+              name={product.ID}
+            >
               Eliminar
             </Button>
           </FlexLayout>

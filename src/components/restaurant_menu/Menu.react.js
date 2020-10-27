@@ -11,7 +11,7 @@ import ProductCard from 'components/restaurant_menu/ProductCard.react';
 
 import {useLazyQuery, useMutation} from '@apollo/client';
 import {GET_ALL_RESTAURANT_PRODUCTS} from 'services/apollo/queries';
-import {TOGGLE_PRODUCT_STATUS} from 'services/apollo/mutations';
+import {TOGGLE_PRODUCT_STATUS, DELETE_PRODUCT} from 'services/apollo/mutations';
 
 import ErrorPage from 'components/shared/ErrorPage.react';
 
@@ -40,6 +40,7 @@ function Menu(): Node {
     GET_ALL_RESTAURANT_PRODUCTS,
   );
   const [toggleProductStatus] = useMutation(TOGGLE_PRODUCT_STATUS);
+  const [deleteProduct] = useMutation(DELETE_PRODUCT);
 
   useEffect(() => {
     console.log('owner effect');
@@ -69,8 +70,19 @@ function Menu(): Node {
 
   if (error) return <ErrorPage>Error con la API</ErrorPage>;
 
-  function handleProduct(e: SyntheticMouseEvent<>) {
-    console.log(e);
+  function handleProductDelete(ID: number) {
+    deleteProduct({
+      variables: {
+        input: ID,
+      },
+    })
+      .then((result) => {
+        console.log(result);
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function toggleStatus(ID: number) {
@@ -97,7 +109,7 @@ function Menu(): Node {
             <ProductCard
               product={product}
               key={product.ID}
-              handleClick={handleProduct}
+              deleteProduct={handleProductDelete}
               toggleStatus={toggleStatus}
             />
           ))}
