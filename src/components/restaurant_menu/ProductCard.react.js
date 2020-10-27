@@ -79,9 +79,10 @@ type Props = {
     tags: [{name: string}],
   },
   handleClick: (e: SyntheticMouseEvent<>) => mixed,
+  toggleStatus: (ID: number) => void,
 };
 
-function ProductCard({product, handleClick}: Props): Node {
+function ProductCard({product, handleClick, toggleStatus}: Props): Node {
   const img = donuts;
   const classes = useStyles({img});
 
@@ -100,7 +101,12 @@ function ProductCard({product, handleClick}: Props): Node {
             <FormControlLabel
               className={classes.checkbox}
               control={
-                <Checkbox checked={product.isActive} name="isActive" color="primary" />
+                <Checkbox
+                  checked={product.isActive}
+                  name="isActive"
+                  color="primary"
+                  onClick={() => toggleStatus(product.ID)}
+                />
               }
               label="Activo"
             />

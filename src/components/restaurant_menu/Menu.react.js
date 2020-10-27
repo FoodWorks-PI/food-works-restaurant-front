@@ -9,8 +9,10 @@ import Sidebar from 'components/shared/Sidebar.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import ProductCard from 'components/restaurant_menu/ProductCard.react';
 
-import {useLazyQuery} from '@apollo/client';
+import {useLazyQuery, useMutation} from '@apollo/client';
 import {GET_ALL_RESTAURANT_PRODUCTS} from 'services/apollo/queries';
+import {TOGGLE_PRODUCT_STATUS} from 'services/apollo/mutations';
+
 import ErrorPage from 'components/shared/ErrorPage.react';
 
 const useStyles = makeStyles({
@@ -34,17 +36,21 @@ function Menu(): Node {
   const classes = useStyles();
 
   const [owner, setData] = useState(null);
-  const [getAllProducts, {loading, data, error}] = useLazyQuery(
+  const [getAllProducts, {loading, data, error, refetch}] = useLazyQuery(
     GET_ALL_RESTAURANT_PRODUCTS,
   );
+  const [toggleProductStatus] = useMutation(TOGGLE_PRODUCT_STATUS);
 
   useEffect(() => {
+    console.log('owner effect');
+
     const local = localStorage.getItem('owner');
     const owner = local ? JSON.parse(local) : null;
     setData(owner);
   }, []);
 
   useEffect(() => {
+    console.log('gett all efefct');
     if (owner) {
       getAllProducts({
         variables: {
@@ -67,6 +73,21 @@ function Menu(): Node {
     console.log(e);
   }
 
+  function toggleStatus(ID: number) {
+    toggleProductStatus({
+      variables: {
+        input: ID,
+      },
+    })
+      .then((result) => {
+        console.log(result);
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
+
   if (data) {
     return (
       <FlexLayout>
@@ -77,6 +98,7 @@ function Menu(): Node {
               product={product}
               key={product.ID}
               handleClick={handleProduct}
+              toggleStatus={toggleStatus}
             />
           ))}
         </FlexLayout>

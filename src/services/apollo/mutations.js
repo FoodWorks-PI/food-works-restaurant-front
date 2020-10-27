@@ -13,3 +13,9 @@ export const NEW_PRODUCT = gql`
     createProduct(input: $input)
   }
 `;
+
+export const TOGGLE_PRODUCT_STATUS = gql`
+  mutation ToggleStatus($input: ID!) {
+    toggleProductStatus(input: $input)
+  }
+`;
