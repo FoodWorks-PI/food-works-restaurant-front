@@ -22,9 +22,7 @@ export const GET_ALL_RESTAURANT_PRODUCTS = gql`
       ID
       name
       description
-      tags {
-        name
-      }
+      tags
       isActive
       cost
     }

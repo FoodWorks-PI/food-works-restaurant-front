@@ -1,7 +1,7 @@
 // @flow strict
 
 import type {Node} from 'react';
-import type {NewProduct} from 'constants/ResourcesTypes';
+import type {Product} from 'constants/ResourcesTypes';
 
 import React, {useState} from 'react';
 import {
@@ -54,27 +54,24 @@ const useStyles = makeStyles({
 type Props = {
   isOpen: boolean,
   closeDialog: (e: SyntheticMouseEvent<>) => mixed,
-  createProduct: (data: NewProduct) => void,
+  updateProduct: (data: Product) => void,
+  currentProduct: Product,
 };
 
-const initialState = {
-  name: '',
-  description: '',
-  cost: 0,
-  tags: [''],
-  isActive: true,
-  restaurantID: null,
-};
-
-function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node {
+function ProductEditDialog({
+  isOpen,
+  closeDialog,
+  updateProduct,
+  currentProduct,
+}: Props): Node {
   const classes = useStyles();
-  const [alertOpen, setAlert] = useState<boolean>(false);
-  const [alertText, setAlertText] = useState<string>('');
-  const [product, setProduct] = useState(initialState);
+  const [alertOpen, setAlert] = useState(false);
+  const [alertText, setAlertText] = useState('');
+  const [product, setProduct] = useState(currentProduct);
 
   function addField(e) {
     e.preventDefault();
-    if (product.tags.length >= 3) {
+    if (product.tags.length >= 5) {
       setAlertText('No más de tres tags');
       setAlert(true);
       return;
@@ -113,7 +110,7 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
       setAlert(true);
       return;
     } else {
-      createProduct(product);
+      updateProduct(product);
     }
   }
 
@@ -206,7 +203,7 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
         </FlexLayout>
       </DialogContent>
       <DialogActions className={classes.buttons}>
-        <Button onClick={handleSubmit}>Crear</Button>
+        <Button onClick={handleSubmit}>Actualizar</Button>
         <Button onClick={closeDialog} className={classes.button}>
           Cancelar
         </Button>
@@ -215,4 +212,4 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
   );
 }
 
-export default CreateProductDialog;
+export default ProductEditDialog;

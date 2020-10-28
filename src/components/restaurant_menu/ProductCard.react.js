@@ -1,6 +1,7 @@
 // @flow strict
 
 import type {Node} from 'react';
+import type {Product} from 'constants/ResourcesTypes';
 
 import React from 'react';
 import {makeStyles} from '@material-ui/core/styles';
@@ -59,36 +60,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-// const product = {
-//   id: 0,
-//   name: 'Donas',
-//   isActive: true,
-//   price: 50.0,
-//   description: 'ricas donas de muchos sabores',
-//   tags: ['postres', 'dulce'],
-//   img: donuts,
-// };
-
 type Props = {
-  product: {
-    ID: number,
-    name: string,
-    description: string,
-    isActive: boolean,
-    cost: number,
-    tags: [{name: string}],
-  },
+  product: Product,
   deleteProduct: (ID: number) => mixed,
   toggleStatus: (ID: number) => void,
+  editProduct: (product: Product) => void,
 };
 
-function ProductCard({product, deleteProduct, toggleStatus}: Props): Node {
+function ProductCard({product, deleteProduct, toggleStatus, editProduct}: Props): Node {
   const img = donuts;
   const classes = useStyles({img});
-
-  function handleClick() {
-    console.log('placeholder');
-  }
 
   function handleDelete(e: SyntheticMouseEvent<>) {
     e.preventDefault();
@@ -98,6 +79,10 @@ function ProductCard({product, deleteProduct, toggleStatus}: Props): Node {
     } else {
       deleteProduct(product.ID);
     }
+  }
+
+  function handleEdit(e: SyntheticMouseEvent<>) {
+    editProduct(product);
   }
 
   return (
@@ -129,7 +114,7 @@ function ProductCard({product, deleteProduct, toggleStatus}: Props): Node {
             <FlexLayout>
               {product.tags.map((tag, ndx) => (
                 <Chip
-                  label={tag.name}
+                  label={tag}
                   key={ndx}
                   color="primary"
                   size="small"
@@ -142,14 +127,10 @@ function ProductCard({product, deleteProduct, toggleStatus}: Props): Node {
             </Typography>
           </FlexLayout>
           <FlexLayout justify="end" className={classes.buttons}>
-            <Button className={classes.buttonEdit} onClick={handleClick}>
+            <Button className={classes.buttonEdit} onClick={handleEdit}>
               Editar
             </Button>
-            <Button
-              className={classes.buttonDelete}
-              onClick={handleDelete}
-              name={product.ID}
-            >
+            <Button className={classes.buttonDelete} onClick={handleDelete}>
               Eliminar
             </Button>
           </FlexLayout>

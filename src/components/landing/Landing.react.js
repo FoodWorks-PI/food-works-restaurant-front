@@ -4,13 +4,13 @@ import type {Node} from 'react';
 
 import React, {useEffect} from 'react';
 
-import {Redirect} from 'react-router-dom';
 import {Typography} from '@material-ui/core';
 
 import FlexLayout from 'components/shared/FlexLayout.react';
 import Button from 'components/shared/Button.react';
 import ErrorPage from 'components/shared/ErrorPage.react';
 import RestaurantCreatedRedirect from 'components/restaurant_register_info/RestaurantCreatedRedirect.react';
+import LoadingPage from 'components/shared/LoadingPage.react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getSession} from 'stores/actions/authActions';
@@ -25,11 +25,7 @@ function Landing(): Node {
   }, [dispatch]);
 
   if (authState.isFetching) {
-    return (
-      <Typography variant="h2" align="center" color="primary">
-        CARGANDO...
-      </Typography>
-    );
+    return <LoadingPage />;
   } else if (authState.hasError) {
     return <ErrorPage>Error obteniendo sesión</ErrorPage>;
   } else if (authState.session) {
