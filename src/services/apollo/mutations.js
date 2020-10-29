@@ -7,3 +7,21 @@ export const NEW_RESTAURANT_OWNER = gql`
     createRestaurantOwnerProfile(input: $input)
   }
 `;
+
+export const NEW_PRODUCT = gql`
+  mutation NewProduct($input: RegisterProductInput!) {
+    createProduct(input: $input)
+  }
+`;
+
+export const TOGGLE_PRODUCT_STATUS = gql`
+  mutation ToggleStatus($input: ID!) {
+    toggleProductStatus(input: $input)
+  }
+`;
+
+export const DELETE_PRODUCT = gql`
+  mutation DeleteProduct($input: ID!) {
+    deleteProduct(input: $input)
+  }
+`;

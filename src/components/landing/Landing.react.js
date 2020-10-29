@@ -30,7 +30,7 @@ function Landing(): Node {
       </Typography>
     );
   } else if (authState.hasError) {
-    return <ErrorPage>Error obteniendo usario</ErrorPage>;
+    return <ErrorPage>Error obteniendo sesión</ErrorPage>;
   } else if (authState.session) {
     return <RestaurantCreatedRedirect />;
   } else {

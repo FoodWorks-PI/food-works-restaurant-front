@@ -86,7 +86,7 @@ function RestaurantCreationGuided(): Node {
             name: state.restaurant.name,
             address: {...address},
             description: state.restaurant.description,
-            tags: [{name: state.restaurant.cuisine}],
+            tags: [state.restaurant.cuisine],
           },
         },
       },
@@ -94,7 +94,7 @@ function RestaurantCreationGuided(): Node {
       .then((result) => {
         console.log('Created owner successfully');
         console.log(result);
-        history.push('/restaurant/dashboard');
+        history.push('/restaurant/protected/dashboard');
       })
       .catch((error) => {
         console.log('Error creating owner');
