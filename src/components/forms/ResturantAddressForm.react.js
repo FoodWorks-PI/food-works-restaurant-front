@@ -1,6 +1,6 @@
 // @flow strict
 
-import React, {useState} from 'react';
+import React from 'react';
 import type {Node} from 'react';
 import {Card, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';

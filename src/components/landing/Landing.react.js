@@ -4,7 +4,6 @@ import type {Node} from 'react';
 
 import React, {useEffect} from 'react';
 
-import {Redirect} from 'react-router-dom';
 import {Typography} from '@material-ui/core';
 
 import FlexLayout from 'components/shared/FlexLayout.react';
