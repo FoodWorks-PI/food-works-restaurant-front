@@ -1,0 +1,29 @@
+// @flow strict
+
+import type {Node} from 'react';
+
+import React from 'react';
+import {Redirect} from 'react-router-dom';
+
+import RestaurantCreationGuided from 'components/restaurant_register_info/RestaurantCreationGuided.react';
+
+import {useQuery} from '@apollo/client';
+import {GET_CURRENT_OWNER} from 'services/apollo/queries';
+
+function RestaurantCreatedRedirect(): Node {
+  const {loading, error, data} = useQuery(GET_CURRENT_OWNER);
+
+  if (loading) return 'Loading...';
+  if (error) return <RestaurantCreationGuided />;
+
+  return (
+    <Redirect
+      to={{
+        pathname: '/restaurant/protected/dashboard',
+        state: {owner: data},
+      }}
+    />
+  );
+}
+
+export default RestaurantCreatedRedirect;
