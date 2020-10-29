@@ -1,7 +1,7 @@
 // @flow strict
 
 import type {Node} from 'react';
-import type {NewProduct, Owner} from 'constants/ResourcesTypes';
+import type {Owner} from 'constants/ResourcesTypes';
 
 import React, {useState, useEffect} from 'react';
 
