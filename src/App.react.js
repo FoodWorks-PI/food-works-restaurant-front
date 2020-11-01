@@ -22,6 +22,7 @@ import RestaurantStore from 'stores/RestaurantStore';
 import Dashboard from 'components/Dashboard.react';
 import Menu from 'components/restaurant_menu/Menu.react';
 import Landing from 'components/landing/Landing.react';
+import Account from 'components/account/AccountPage.react';
 import RestaurantCreatedRedirect from 'components/restaurant_register_info/RestaurantCreatedRedirect.react';
 
 function App(): Node {
@@ -41,6 +42,9 @@ function App(): Node {
               </Route>
               <Route path="/restaurant/protected/products">
                 <Menu />
+              </Route>
+              <Route path="/restaurant/protected/account">
+                <Account />
               </Route>
             </Switch>
           </Router>

@@ -7,7 +7,6 @@ export const GET_CURRENT_OWNER = gql`
     getCurrentRestaurantOwner {
       ID
       name
-      email
       restaurant {
         ID
         name
@@ -25,6 +24,47 @@ export const GET_ALL_RESTAURANT_PRODUCTS = gql`
       tags
       isActive
       cost
+    }
+  }
+`;
+
+export const GET_RESTAURANT = gql`
+  query getRestaurant($input: ID!) {
+    getRestaurantByID(input: $input) {
+      ID
+      name
+      description
+      tags
+      address {
+        latitude
+        longitude
+        streetLine
+      }
+    }
+  }
+`;
+
+export const GET_CURRENT_COMPLETE_OWNER = gql`
+  query getFullOwner {
+    getCurrentRestaurantOwner {
+      ID
+      name
+      email
+      phone
+      restaurant {
+        ID
+        name
+        description
+        tags
+        address {
+          latitude
+          longitude
+          streetLine
+        }
+        products {
+          name
+        }
+      }
     }
   }
 `;
