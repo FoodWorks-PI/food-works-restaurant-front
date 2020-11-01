@@ -10,7 +10,6 @@ import {Redirect} from 'react-router-dom';
 
 import FlexLayout from 'components/shared/FlexLayout.react';
 import Button from 'components/shared/Button.react';
-import ErrorPage from 'components/shared/ErrorPage.react';
 import LoadingPage from 'components/shared/LoadingPage.react';
 
 import {useDispatch, useSelector} from 'react-redux';
