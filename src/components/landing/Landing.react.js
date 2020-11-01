@@ -4,18 +4,38 @@ import type {Node} from 'react';
 
 import React, {useEffect} from 'react';
 
+import {makeStyles} from '@material-ui/core/styles';
 import {Typography} from '@material-ui/core';
 import {Redirect} from 'react-router-dom';
 
 import FlexLayout from 'components/shared/FlexLayout.react';
 import Button from 'components/shared/Button.react';
-import ErrorPage from 'components/shared/ErrorPage.react';
 import LoadingPage from 'components/shared/LoadingPage.react';
 
 import {useDispatch, useSelector} from 'react-redux';
 import {getSession} from 'stores/actions/authActions';
 
+import background from 'assets/background.jpg';
+
+const useStyles = makeStyles({
+  root: {
+    backgroundImage: `url(${background})`,
+    backgroundSize: 'cover',
+    width: '100vw',
+    height: '100vh',
+    color: 'white',
+  },
+  buttons: {
+    width: '50%',
+  },
+  anchor: {
+    textDecoration: 'none',
+    color: 'white',
+  },
+});
+
 function Landing(): Node {
+  const classes = useStyles();
   const authState = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   console.log(authState);
@@ -26,8 +46,6 @@ function Landing(): Node {
 
   if (authState.isFetching) {
     return <LoadingPage />;
-  } else if (authState.hasError) {
-    return <ErrorPage>Error obteniendo sesión</ErrorPage>;
   } else if (authState.session) {
     return (
       <Redirect
@@ -38,20 +56,36 @@ function Landing(): Node {
     );
   } else {
     return (
-      <FlexLayout direction="vertical" align="center">
-        <Typography variant="h2" align="center" color="primary">
-          FOOD WORKS - Restaurant
+      <FlexLayout
+        direction="vertical"
+        align="center"
+        justify="center"
+        className={classes.root}
+      >
+        <Typography variant="h1" align="center">
+          FOOD WORKS
         </Typography>
-        <Button onClick={(e) => console.log(e)}>
-          <a href="https://127.0.0.1:4455/auth/registration?clientApp=https://127.0.1:4455/restaurant/protected">
-            Register
-          </a>
-        </Button>
-        <Button onClick={(e) => console.log(e)}>
-          <a href="https://127.0.0.1:4455/auth/login?clientApp=https://127.0.0.1:4455/restaurant/protected">
-            Login
-          </a>
-        </Button>
+        <Typography variant="h4" align="center" gutterBottom>
+          Salva comida y gana dinero
+        </Typography>
+        <FlexLayout justify="evenly" className={classes.buttons}>
+          <Button onClick={(e) => console.log(e)}>
+            <a
+              href="https://127.0.0.1:4455/auth/registration?clientApp=https://127.0.1:4455/restaurant/protected"
+              className={classes.anchor}
+            >
+              Regístrate
+            </a>
+          </Button>
+          <Button onClick={(e) => console.log(e)}>
+            <a
+              href="https://127.0.0.1:4455/auth/login?clientApp=https://127.0.0.1:4455/restaurant/protected"
+              className={classes.anchor}
+            >
+              Inicia Sesión
+            </a>
+          </Button>
+        </FlexLayout>
       </FlexLayout>
     );
   }
