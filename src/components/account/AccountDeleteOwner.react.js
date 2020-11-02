@@ -1,14 +1,16 @@
 // @flow strict
 
 import type {Node} from 'react';
+import type {OwnerProfile} from 'constants/ResourcesTypes';
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import FlexLayout from 'components/shared/FlexLayout.react';
 import Button from 'components/shared/Button.react';
+import ConfirmDialog from 'components/account/AccountConfirmDialog.react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,11 +24,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AccountDeleteOwner(): Node {
+type Props = {
+  owner: OwnerProfile,
+};
+
+function AccountDeleteOwner({owner}: Props): Node {
   const classes = useStyles();
+  const [isOpen, setOpen] = useState(false);
 
   function handleDelete() {
     console.log('Delete');
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+  function handleOpen() {
+    setOpen(true);
   }
 
   return (
@@ -38,9 +52,15 @@ function AccountDeleteOwner(): Node {
         Esta acción no podrá ser devuelta. Todos los datos asociados a tu cuenta serán
         eliminados.
       </Typography>
-      <Button className={classes.button} onClick={handleDelete}>
+      <Button className={classes.button} onClick={handleOpen}>
         Eliminar Cuenta
       </Button>
+      <ConfirmDialog
+        isOpen={isOpen}
+        closeDialog={handleClose}
+        deleteProduct={handleDelete}
+        confirmationText={owner.name}
+      />
     </FlexLayout>
   );
 }

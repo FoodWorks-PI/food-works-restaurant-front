@@ -1,14 +1,17 @@
 // @flow strict
 
 import type {Node} from 'react';
+import type {Restaurant} from 'constants/ResourcesTypes';
 
-import React from 'react';
+import React, {useState} from 'react';
 
 import {Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import FlexLayout from 'components/shared/FlexLayout.react';
 import Button from 'components/shared/Button.react';
+
+import ConfirmDialog from 'components/account/AccountConfirmDialog.react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -22,11 +25,23 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-function AccountDeleteRestaurant(): Node {
+type Props = {
+  restaurant: Restaurant,
+};
+
+function AccountDeleteRestaurant({restaurant}: Props): Node {
   const classes = useStyles();
+  const [isOpen, setOpen] = useState(false);
 
   function handleDelete() {
     console.log('Delete');
+  }
+
+  function handleClose() {
+    setOpen(false);
+  }
+  function handleOpen() {
+    setOpen(true);
   }
 
   return (
@@ -38,9 +53,15 @@ function AccountDeleteRestaurant(): Node {
         Esta acción no podrá ser devuelta. Los productos y ordenes asociadas a este
         restaurante serán eliminados también.
       </Typography>
-      <Button className={classes.button} onClick={handleDelete}>
+      <Button className={classes.button} onClick={handleOpen}>
         Eliminar Restaurante
       </Button>
+      <ConfirmDialog
+        isOpen={isOpen}
+        closeDialog={handleClose}
+        deleteProduct={handleDelete}
+        confirmationText={restaurant.name}
+      />
     </FlexLayout>
   );
 }

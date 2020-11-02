@@ -51,8 +51,8 @@ function AccountSidePanel({editRestaurant, restaurant, editOwner, owner}: Props)
             editRestaurant={editRestaurant}
           />
           <EditOwnerForm currentOwner={owner} editOwner={editOwner} />
-          <DeleteRestaurantForm />
-          <DeleteOwnerForm />
+          <DeleteRestaurantForm restaurant={restaurant} />
+          <DeleteOwnerForm owner={owner} />
         </FlexLayout>
       </Paper>
     </Hidden>
