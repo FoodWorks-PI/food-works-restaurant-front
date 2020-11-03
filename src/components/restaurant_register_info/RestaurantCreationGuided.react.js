@@ -94,7 +94,7 @@ function RestaurantCreationGuided(): Node {
       .then((result) => {
         console.log('Created owner successfully');
         console.log(result);
-        history.push('/restaurant/protected/dashboard');
+        history.replace('/restaurant/protected');
       })
       .catch((error) => {
         console.log('Error creating owner');

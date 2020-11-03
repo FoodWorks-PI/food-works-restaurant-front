@@ -62,7 +62,7 @@ const items = [
   {
     name: 'Inicio',
     icon: Home,
-    route: '/restaurant/protected/dashboard',
+    route: '/restaurant/protected',
   },
   {
     name: 'Menú',
