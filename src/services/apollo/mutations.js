@@ -31,3 +31,15 @@ export const UPDATE_PRODUCT = gql`
     updateProduct(input: $input)
   }
 `;
+
+export const UPDATE_RESTAURANT = gql`
+  mutation UpdateRestaurant($input: RegisterRestaurantInput!) {
+    updateRestaurant(input: $input)
+  }
+`;
+
+export const UPDATE_OWNER = gql`
+  mutation UpdateRestaurant($input: UpdateRestaurantOwnerInput!) {
+    updateRestaurantOwnerProfile(input: $input)
+  }
+`;

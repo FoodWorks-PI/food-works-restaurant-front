@@ -30,9 +30,14 @@ const useStyles = makeStyles({
 type Props = {
   editRestaurant: (restaurant: Restaurant) => void,
   currentRestaurant: Restaurant,
+  setAlertState: (alert: {isOpen: boolean, text: string, type?: ?string}) => void,
 };
 
-function AccountEditRestaurantForm({editRestaurant, currentRestaurant}: Props): Node {
+function AccountEditRestaurantForm({
+  editRestaurant,
+  currentRestaurant,
+  setAlertState,
+}: Props): Node {
   const classes = useStyles();
   const [position, posError, isFetching] = useInitialGeoPosition();
   const [restaurant, setRestaurant] = useState(currentRestaurant);
@@ -57,6 +62,16 @@ function AccountEditRestaurantForm({editRestaurant, currentRestaurant}: Props): 
     }));
   }
 
+  function handleTags(e: SyntheticInputEvent<>) {
+    const value: string = e.target.value;
+    let tags = [...restaurant.tags];
+    tags[0] = value;
+    setRestaurant((prevRestaurant) => ({
+      ...prevRestaurant,
+      tags: tags,
+    }));
+  }
+
   function handleAddress(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
@@ -78,7 +93,14 @@ function AccountEditRestaurantForm({editRestaurant, currentRestaurant}: Props): 
       }));
     }
     const valid = Object.values(restaurant).every((v) => v !== '');
-    if (valid) editRestaurant(restaurant);
+    if (valid) {
+      editRestaurant(restaurant);
+    } else {
+      setAlertState({
+        isOpen: true,
+        text: 'Llena todos los campos',
+      });
+    }
   }
 
   return (
@@ -104,7 +126,7 @@ function AccountEditRestaurantForm({editRestaurant, currentRestaurant}: Props): 
           name="tags"
           placeholder="Mexicana"
           value={restaurant.tags[0]}
-          onChange={handleChange}
+          onChange={handleTags}
         />
         <TextInput
           label="Calle"

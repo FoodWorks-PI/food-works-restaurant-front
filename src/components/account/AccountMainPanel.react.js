@@ -16,10 +16,7 @@ import DeleteOwnerForm from 'components/account/AccountDeleteOwner.react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
-    [theme.breakpoints.down('md')]: {
-      flex: '0 0 100%',
-    },
-    flex: `0 0 80%`,
+    width: '99%',
     margin: '0 5px',
     padding: 5,
   },
@@ -34,9 +31,16 @@ type Props = {
   restaurant: Restaurant,
   editOwner: (owner: OwnerProfile) => void,
   owner: OwnerProfile,
+  setAlertState: (alert: {isOpen: boolean, text: string, type: ?string}) => void,
 };
 
-function AccountSidePanel({editRestaurant, restaurant, editOwner, owner}: Props): Node {
+function AccountMainPanel({
+  editRestaurant,
+  restaurant,
+  editOwner,
+  owner,
+  setAlertState,
+}: Props): Node {
   const classes = useStyles();
 
   return (
@@ -49,8 +53,13 @@ function AccountSidePanel({editRestaurant, restaurant, editOwner, owner}: Props)
           <EditRestaurantForm
             currentRestaurant={restaurant}
             editRestaurant={editRestaurant}
+            setAlertState={setAlertState}
           />
-          <EditOwnerForm currentOwner={owner} editOwner={editOwner} />
+          <EditOwnerForm
+            currentOwner={owner}
+            editOwner={editOwner}
+            setAlertState={setAlertState}
+          />
           <DeleteRestaurantForm restaurant={restaurant} />
           <DeleteOwnerForm owner={owner} />
         </FlexLayout>
@@ -59,4 +68,4 @@ function AccountSidePanel({editRestaurant, restaurant, editOwner, owner}: Props)
   );
 }
 
-export default AccountSidePanel;
+export default AccountMainPanel;

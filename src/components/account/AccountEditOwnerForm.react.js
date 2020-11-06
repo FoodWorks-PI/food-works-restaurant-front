@@ -28,9 +28,10 @@ const useStyles = makeStyles({
 type Props = {
   editOwner: (owner: OwnerProfile) => void,
   currentOwner: OwnerProfile,
+  setAlertState: (alert: {isOpen: boolean, text: string, type?: ?string}) => void,
 };
 
-function AccountEditOwnerForm({editOwner, currentOwner}: Props): Node {
+function AccountEditOwnerForm({editOwner, currentOwner, setAlertState}: Props): Node {
   const classes = useStyles();
   const [owner, setOwner] = useState(currentOwner);
 
@@ -45,7 +46,14 @@ function AccountEditOwnerForm({editOwner, currentOwner}: Props): Node {
 
   function handleSubmit() {
     const valid = Object.values(owner).every((v) => v !== '');
-    if (valid) editOwner(owner);
+    if (valid) {
+      editOwner(owner);
+    } else {
+      setAlertState({
+        isOpen: true,
+        text: 'Llena todos los campos',
+      });
+    }
   }
 
   return (
