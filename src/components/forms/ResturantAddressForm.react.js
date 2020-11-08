@@ -43,7 +43,7 @@ type Props = {
   restaurant: {
     name: string,
     description: string,
-    cuisine: string,
+    tags: string[],
   },
   street: string,
   handleChange: (e: SyntheticInputEvent<>) => mixed,

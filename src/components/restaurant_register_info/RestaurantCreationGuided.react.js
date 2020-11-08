@@ -46,7 +46,7 @@ const initialState = {
   restaurant: {
     name: '',
     description: '',
-    cuisine: '',
+    tags: [],
   },
 };
 const initialAddress = {
@@ -86,7 +86,7 @@ function RestaurantCreationGuided(): Node {
             name: state.restaurant.name,
             address: {...address},
             description: state.restaurant.description,
-            tags: [state.restaurant.cuisine],
+            tags: [...state.restaurant.tags],
           },
         },
       },
@@ -113,9 +113,17 @@ function RestaurantCreationGuided(): Node {
   function handleRestaurantChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
+    console.log(name, value);
     setState((prevState) => ({
       ...prevState,
       restaurant: {...prevState.restaurant, [name]: value},
+    }));
+  }
+
+  function handleTagsChange(newTags: string[]) {
+    setState((prevState) => ({
+      ...prevState,
+      restaurant: {...prevState.restaurant, tags: newTags},
     }));
   }
 
@@ -155,6 +163,7 @@ function RestaurantCreationGuided(): Node {
             prevStep={prevStep}
             setOpen={setOpen}
             handleChange={handleRestaurantChange}
+            handleTags={handleTagsChange}
             values={state.restaurant}
           />
         );
