@@ -13,11 +13,12 @@ import {TAG_AUTOCOMPLETE} from 'services/apollo/queries';
 type Props = {
   tags: string[],
   setTags: (tags: string[]) => void,
+  className?: ?string,
 };
 
 const filter = createFilterOptions();
 
-function TagAutoComplete({tags, setTags}: Props): Node {
+function TagAutoComplete({tags, setTags, className}: Props): Node {
   const [inputTag, setInputTag] = useState('');
   const [options, setOptions] = useState([]);
   const {error, loading, refetch} = useQuery(TAG_AUTOCOMPLETE, {
@@ -46,7 +47,6 @@ function TagAutoComplete({tags, setTags}: Props): Node {
     debounced(value);
   };
 
-  //console.log(options);
   if (loading) console.log('loading');
   if (error) console.log('erro');
 
@@ -59,6 +59,7 @@ function TagAutoComplete({tags, setTags}: Props): Node {
       selectOnFocus
       clearOnBlur
       multiple
+      className={className}
       style={{width: '100%'}}
       value={tags}
       options={options}
@@ -77,7 +78,6 @@ function TagAutoComplete({tags, setTags}: Props): Node {
         return filtered;
       }}
       onChange={(event, newValue) => {
-        console.log('CHANGE', newValue, typeof newValue);
         if (newValue.length === 0) {
           setOptions([]);
         } else {
@@ -86,10 +86,7 @@ function TagAutoComplete({tags, setTags}: Props): Node {
         setTags(newValue);
       }}
       inputValue={inputTag}
-      onInputChange={(event, newInputValue) => {
-        console.log(newInputValue);
-        onChange(newInputValue);
-      }}
+      onInputChange={(event, newInputValue) => onChange(newInputValue)}
       renderInput={(params) => (
         <TextField
           {...params}
