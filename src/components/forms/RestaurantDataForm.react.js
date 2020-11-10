@@ -2,7 +2,7 @@
 
 import type {Node} from 'react';
 
-import React, {useState} from 'react';
+import React from 'react';
 
 import {Card, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
@@ -73,7 +73,6 @@ type Props = {
 function RestaurantDataForm(props: Props): Node {
   const classes = useStyles();
   const {values, handleChange} = props;
-  //const [value, setValue] = useState([]);
 
   function continueForm(e) {
     e.preventDefault();
@@ -87,7 +86,6 @@ function RestaurantDataForm(props: Props): Node {
   }
 
   function setTags(tags: string[]) {
-    //setValue(tags);
     props.handleTags(tags);
   }
 

@@ -113,7 +113,6 @@ function RestaurantCreationGuided(): Node {
   function handleRestaurantChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value: string = e.target.value;
-    console.log(name, value);
     setState((prevState) => ({
       ...prevState,
       restaurant: {...prevState.restaurant, [name]: value},

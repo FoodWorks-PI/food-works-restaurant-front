@@ -78,8 +78,6 @@ function RestaurantAdressForm(props: Props): Node {
 
   if (posError && !isFetching) {
     window.alert('Acepta los permisos de ubicacion');
-  } else if (!isFetching) {
-    console.log(position);
   }
 
   return (
