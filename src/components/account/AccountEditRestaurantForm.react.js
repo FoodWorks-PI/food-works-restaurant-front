@@ -10,6 +10,7 @@ import {makeStyles} from '@material-ui/core/styles';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import TextInput from 'components/shared/TextInput.react';
 import Button from 'components/shared/Button.react';
+import TagAutoComplete from 'components/shared/TagAutoComplete.react';
 
 import useInitialGeoPosition from 'hooks/useInitialGeoPosition';
 
@@ -24,6 +25,10 @@ const useStyles = makeStyles({
   button: {
     fontSize: 12,
     alignSelf: 'flex-end',
+  },
+  tagsInput: {
+    marginTop: 10,
+    marginBottom: 5,
   },
 });
 
@@ -47,7 +52,6 @@ function AccountEditRestaurantForm({
       window.alert('Acepta los permisos de ubicación');
       return false;
     } else if (!isFetching) {
-      console.log(position);
       return true;
     }
   }
@@ -62,13 +66,10 @@ function AccountEditRestaurantForm({
     }));
   }
 
-  function handleTags(e: SyntheticInputEvent<>) {
-    const value: string = e.target.value;
-    let tags = [...restaurant.tags];
-    tags[0] = value;
+  function handleTags(newTags: string[]) {
     setRestaurant((prevRestaurant) => ({
       ...prevRestaurant,
-      tags: tags,
+      tags: [...newTags],
     }));
   }
 
@@ -121,12 +122,10 @@ function AccountEditRestaurantForm({
           value={restaurant.description}
           onChange={handleChange}
         />
-        <TextInput
-          label="Tipo de Cocina"
-          name="tags"
-          placeholder="Mexicana"
-          value={restaurant.tags[0]}
-          onChange={handleTags}
+        <TagAutoComplete
+          tags={restaurant.tags}
+          setTags={handleTags}
+          className={classes.tagsInput}
         />
         <TextInput
           label="Calle"

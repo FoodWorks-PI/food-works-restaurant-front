@@ -57,3 +57,9 @@ export const GET_CURRENT_COMPLETE_OWNER = gql`
     }
   }
 `;
+
+export const TAG_AUTOCOMPLETE = gql`
+  query getTags($input: String!) {
+    autoCompleteTag(input: $input)
+  }
+`;

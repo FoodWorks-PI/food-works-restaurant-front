@@ -1,13 +1,16 @@
 // @flow strict
 
-import React from 'react';
 import type {Node} from 'react';
+
+import React from 'react';
+
 import {Card, CardContent, Typography} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Button from 'components/shared/Button.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import TextInput from 'components/shared/TextInput.react';
+import TagAutoComplete from 'components/shared/TagAutoComplete.react';
 
 const useStyles = makeStyles({
   card: {
@@ -58,12 +61,13 @@ type Props = {
   values: {
     name: string,
     description: string,
-    cuisine: string,
+    tags: string[],
   },
   handleChange: (e: SyntheticInputEvent<>) => mixed,
   nextStep: () => void,
   prevStep: () => void,
   setOpen: (value: boolean) => void,
+  handleTags: (tags: string[]) => void,
 };
 
 function RestaurantDataForm(props: Props): Node {
@@ -72,13 +76,17 @@ function RestaurantDataForm(props: Props): Node {
 
   function continueForm(e) {
     e.preventDefault();
-    const valid = Object.values(values).every((v) => v !== '');
+    const valid = Object.values(values).every((v) => v !== '') && values.tags.length > 0;
     valid ? props.nextStep() : props.setOpen(true);
   }
 
   function previousForm(e) {
     e.preventDefault();
     props.prevStep();
+  }
+
+  function setTags(tags: string[]) {
+    props.handleTags(tags);
   }
 
   return (
@@ -114,14 +122,7 @@ function RestaurantDataForm(props: Props): Node {
             onChange={handleChange}
             className={classes.input}
           />
-          <TextInput
-            name="cuisine"
-            label="Tipo de Cocina"
-            color="primary"
-            value={values.cuisine}
-            onChange={handleChange}
-            className={classes.input}
-          />
+          <TagAutoComplete tags={values.tags} setTags={setTags} />
           <TextInput
             name="description"
             label="Descripción"

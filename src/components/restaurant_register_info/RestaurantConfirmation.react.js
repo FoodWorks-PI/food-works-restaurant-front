@@ -44,7 +44,7 @@ type Props = {
     restaurant: {
       name: string,
       description: string,
-      cuisine: string,
+      tags: string[],
     },
   },
   address: {
@@ -94,8 +94,8 @@ function RestaurantConfirmation({
           <Typography display="block" variant="h6" color="secondary">
             {state.restaurant.name}
           </Typography>
-          <Typography display="block" variant="body2" color="secondary">
-            {state.restaurant.cuisine}
+          <Typography display="block" variant="subtitle2" color="secondary">
+            {state.restaurant.tags.join(', ')}
           </Typography>
           <Typography display="block" variant="body2" color="secondary">
             {state.restaurant.description}
