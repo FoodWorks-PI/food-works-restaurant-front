@@ -1,16 +1,21 @@
 // @flow strict
 
 import type {Node} from 'react';
-import type {Owner} from 'constants/ResourcesTypes';
+import type {Owner, Order} from 'constants/ResourcesTypes';
 
 import React, {useState, useEffect} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
 import {Typography} from '@material-ui/core';
 
+import ErrorPage from 'components/shared/ErrorPage.react';
 import Sidebar from 'components/shared/Sidebar.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
 import LoadingPage from 'components/shared/LoadingPage.react';
+import OrderRow from 'components/orders/OrderRow.react';
+
+import {useQuery} from '@apollo/client';
+import {GET_ORDERS} from 'services/apollo/queries';
 
 const useStyles = makeStyles({
   root: {
@@ -31,34 +36,37 @@ const useStyles = makeStyles({
 
 function Dashboard(): Node {
   const classes = useStyles();
-  const [ownerData, setOwnerData] = useState<?Owner>(null);
+  const {data, loading, error} = useQuery(GET_ORDERS);
 
-  useEffect(() => {
-    const local = localStorage.getItem('owner');
-    const owner = local ? JSON.parse(local) : null;
-    setOwnerData(owner);
-  }, []);
+  if (loading) return <LoadingPage />;
 
-  if (ownerData) {
-    return (
-      <FlexLayout>
-        <Sidebar />
-        <FlexLayout direction="vertical" className={classes.content}>
-          <Typography variant="h4" color="primary">
-            Hola! {ownerData.name}
-          </Typography>
-          <Typography variant="subtitle1" color="secondary">
-            Bienvienido a tu restaurante "{ownerData.restaurant.name}"
-          </Typography>
-          <Typography variant="h6" color="secondary">
-            No tienes ordenes
-          </Typography>
-        </FlexLayout>
-      </FlexLayout>
-    );
-  } else {
-    return <LoadingPage />;
+  if (error) {
+    console.log(error);
+    return <ErrorPage>Error con la API</ErrorPage>;
   }
+
+  const activeOrders: Order[] = data.getRestaurantOrders.filter(
+    (order) =>
+      order.orderState !== 'COMPLETED' &&
+      order.orderState !== 'CANCELLED' &&
+      order.orderState !== 'ERROR',
+  );
+  const pastOrders: Order[] = data.getRestaurantOrders.filter(
+    (order) =>
+      order.orderState !== 'PENDING_PAYMENT' &&
+      order.orderState !== 'PAID' &&
+      order.orderState !== 'ERROR',
+  );
+  console.log(activeOrders);
+  return (
+    <FlexLayout>
+      <Sidebar />
+      <FlexLayout direction="vertical" className={classes.content}>
+        <OrderRow orders={activeOrders}>Ordenes Activas</OrderRow>
+        <OrderRow orders={pastOrders}>Ordenes Pasadas</OrderRow>
+      </FlexLayout>
+    </FlexLayout>
+  );
 }
 
 export default Dashboard;

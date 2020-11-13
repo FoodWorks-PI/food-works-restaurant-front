@@ -63,3 +63,21 @@ export const TAG_AUTOCOMPLETE = gql`
     autoCompleteTag(input: $input)
   }
 `;
+
+export const GET_ORDERS = gql`
+  query getOrders {
+    getRestaurantOrders {
+      ID
+      quantity
+      orderState
+      updatedAt
+      product {
+        name
+        cost
+      }
+      customer {
+        name
+      }
+    }
+  }
+`;

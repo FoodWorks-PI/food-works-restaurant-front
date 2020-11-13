@@ -49,3 +49,14 @@ export type OwnerProfile = {
   lastName: string,
   phone: string,
 };
+
+export type Order = {
+  ID: number,
+  quantity: number,
+  updatedAt: number,
+  orderState: string,
+  product: Product,
+  customer: {
+    name: string,
+  },
+};
