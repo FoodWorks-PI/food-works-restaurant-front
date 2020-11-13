@@ -16,29 +16,18 @@ export const GET_CURRENT_OWNER = gql`
 `;
 
 export const GET_ALL_RESTAURANT_PRODUCTS = gql`
-  query getAllProducts($input: ProductsFilterByRestaurantInput!) {
-    getProductsByRestaurantID(input: $input) {
-      ID
-      name
-      description
-      tags
-      isActive
-      cost
-    }
-  }
-`;
-
-export const GET_RESTAURANT = gql`
-  query getRestaurant($input: ID!) {
-    getRestaurantByID(input: $input) {
-      ID
-      name
-      description
-      tags
-      address {
-        latitude
-        longitude
-        streetLine
+  query getProducts {
+    getCurrentRestaurantOwner {
+      restaurant {
+        ID
+        products {
+          ID
+          name
+          description
+          active
+          tags
+          cost
+        }
       }
     }
   }

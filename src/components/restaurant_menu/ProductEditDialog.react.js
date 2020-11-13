@@ -172,9 +172,9 @@ function ProductEditDialog({
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={product.isActive}
+                    checked={product.active}
                     onChange={handleChange}
-                    name="isActive"
+                    name="active"
                     color="primary"
                   />
                 }

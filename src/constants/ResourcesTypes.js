@@ -4,7 +4,7 @@ export type Product = {
   ID: number,
   name: string,
   description: string,
-  isActive: boolean,
+  active: boolean,
   cost: number,
   tags: string[],
 };
@@ -13,7 +13,7 @@ export type NewProduct = {
   restaurantID: ?number,
   name: string,
   description: string,
-  isActive: boolean,
+  active: boolean,
   cost: number,
   tags: string[],
 };

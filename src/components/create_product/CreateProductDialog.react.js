@@ -62,7 +62,7 @@ const initialState = {
   description: '',
   cost: 0,
   tags: [''],
-  isActive: true,
+  active: true,
   restaurantID: null,
 };
 
@@ -175,9 +175,9 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={product.isActive}
+                    checked={product.active}
                     onChange={handleChange}
-                    name="isActive"
+                    name="active"
                     color="primary"
                   />
                 }

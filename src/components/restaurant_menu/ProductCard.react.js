@@ -101,8 +101,8 @@ function ProductCard({product, deleteProduct, toggleStatus, editProduct}: Props)
               className={classes.checkbox}
               control={
                 <Checkbox
-                  checked={product.isActive}
-                  name="isActive"
+                  checked={product.active}
+                  name="active"
                   color="primary"
                   onClick={() => toggleStatus(product.ID)}
                 />
