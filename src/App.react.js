@@ -22,7 +22,10 @@ import RestaurantStore from 'stores/RestaurantStore';
 import Dashboard from 'components/Dashboard.react';
 import Menu from 'components/restaurant_menu/Menu.react';
 import Landing from 'components/landing/Landing.react';
+import Account from 'components/account/AccountPage.react';
 import RestaurantCreatedRedirect from 'components/restaurant_register_info/RestaurantCreatedRedirect.react';
+import RestaurantCreationGuided from 'components/restaurant_register_info/RestaurantCreationGuided.react';
+import RestaurantNewWrapper from 'components/restaurant_register_info/RestaurantNewWrapper.react';
 
 function App(): Node {
   return (
@@ -34,13 +37,29 @@ function App(): Node {
             <Switch>
               <Route exact path="/restaurant" component={Landing} />
               <Route exact path="/restaurant/protected">
-                <RestaurantCreatedRedirect />
+                <RestaurantCreatedRedirect>
+                  <Dashboard />
+                </RestaurantCreatedRedirect>
               </Route>
               <Route path="/restaurant/protected/dashboard">
-                <Dashboard />
+                <RestaurantCreatedRedirect>
+                  <Dashboard />
+                </RestaurantCreatedRedirect>
               </Route>
               <Route path="/restaurant/protected/products">
-                <Menu />
+                <RestaurantCreatedRedirect>
+                  <Menu />
+                </RestaurantCreatedRedirect>
+              </Route>
+              <Route path="/restaurant/protected/account">
+                <RestaurantCreatedRedirect>
+                  <Account />
+                </RestaurantCreatedRedirect>
+              </Route>
+              <Route path="/restaurant/protected/new">
+                <RestaurantNewWrapper>
+                  <RestaurantCreationGuided />
+                </RestaurantNewWrapper>
               </Route>
             </Switch>
           </Router>

@@ -43,7 +43,7 @@ type Props = {
   restaurant: {
     name: string,
     description: string,
-    cuisine: string,
+    tags: string[],
   },
   street: string,
   handleChange: (e: SyntheticInputEvent<>) => mixed,
@@ -78,8 +78,6 @@ function RestaurantAdressForm(props: Props): Node {
 
   if (posError && !isFetching) {
     window.alert('Acepta los permisos de ubicacion');
-  } else if (!isFetching) {
-    console.log(position);
   }
 
   return (

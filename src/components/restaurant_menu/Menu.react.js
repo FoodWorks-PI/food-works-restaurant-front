@@ -1,7 +1,7 @@
 // @flow strict
 
 import type {Node} from 'react';
-import type {Product, NewProduct, Owner} from 'constants/ResourcesTypes';
+import type {Product, NewProduct} from 'constants/ResourcesTypes';
 
 import React, {useState, useEffect} from 'react';
 
@@ -16,7 +16,7 @@ import LoadingPage from 'components/shared/LoadingPage.react';
 import CreateProductDialog from 'components/create_product/CreateProductDialog.react';
 import ProductEditDialog from 'components/restaurant_menu/ProductEditDialog.react';
 
-import {useLazyQuery, useMutation} from '@apollo/client';
+import {useMutation, useQuery} from '@apollo/client';
 import {GET_ALL_RESTAURANT_PRODUCTS} from 'services/apollo/queries';
 import {
   TOGGLE_PRODUCT_STATUS,
@@ -44,43 +44,29 @@ const useStyles = makeStyles({
 
 function Menu(): Node {
   const classes = useStyles();
-
-  const [owner, setData] = useState<?Owner>(null);
+  const [restaurantID, setID] = useState(null);
   const [isEditOpen, setEditOpen] = useState(false);
   const [isCreateOpen, setCreateOpen] = useState(false);
   const [currentProduct, setProduct] = useState<?Product>(null);
 
-  const [getAllProducts, {loading, data, error, refetch}] = useLazyQuery(
-    GET_ALL_RESTAURANT_PRODUCTS,
-  );
+  const {loading, data, error, refetch} = useQuery(GET_ALL_RESTAURANT_PRODUCTS);
   const [toggleProductStatus] = useMutation(TOGGLE_PRODUCT_STATUS);
   const [deleteProduct] = useMutation(DELETE_PRODUCT);
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
   const [createProduct] = useMutation(NEW_PRODUCT);
 
   useEffect(() => {
-    const local = localStorage.getItem('owner');
-    const owner = local ? JSON.parse(local) : null;
-    setData(owner);
-  }, []);
-
-  useEffect(() => {
-    if (owner) {
-      getAllProducts({
-        variables: {
-          input: {
-            restaurantID: owner.restaurant.ID,
-            productFilterConfig: {
-              includeInactive: true,
-            },
-          },
-        },
-      });
+    if (data) {
+      setID(data.getCurrentRestaurantOwner.restaurant.ID);
     }
-  }, [owner, getAllProducts]);
+  }, [data]);
 
   if (loading) return <LoadingPage />;
-  if (error) return <ErrorPage>Error con la API</ErrorPage>;
+
+  if (error) {
+    console.log(error);
+    return <ErrorPage>Error con la API</ErrorPage>;
+  }
 
   function handleProductDelete(ID: number) {
     deleteProduct({
@@ -97,15 +83,13 @@ function Menu(): Node {
       });
   }
   function handleProductEdit(product: Product) {
-    //Change to cents
-    product.cost = parseInt(product.cost * 100);
     updateProduct({
       variables: {
         input: {
           ID: product.ID,
           name: product.name,
           description: product.description,
-          active: product.isActive,
+          active: product.active,
           cost: product.cost,
           tags: product.tags,
         },
@@ -113,7 +97,7 @@ function Menu(): Node {
     })
       .then((result) => {
         console.log(result);
-        setEditOpen(false);
+        closeEditDialog();
         refetch();
       })
       .catch((error) => {
@@ -124,10 +108,10 @@ function Menu(): Node {
     createProduct({
       variables: {
         input: {
-          restaurantID: owner?.restaurant?.ID,
+          restaurantID: restaurantID,
           name: product.name,
           description: product.description,
-          active: product.isActive,
+          active: product.active,
           cost: parseInt(product.cost * 100),
           tags: product.tags,
         },
@@ -165,7 +149,7 @@ function Menu(): Node {
       ID: product.ID,
       name: product.name,
       description: product.description,
-      isActive: product.isActive,
+      active: product.active,
       cost: product.cost / 100,
       tags: product.tags,
     };
@@ -184,49 +168,47 @@ function Menu(): Node {
     setCreateOpen(false);
   }
 
-  if (data) {
-    return (
-      <FlexLayout>
-        <Sidebar />
-        <FlexLayout direction="vertical" className={classes.content}>
-          {data.getProductsByRestaurantID.length === 0 && <h1>No tienes productos</h1>}
-          {data.getProductsByRestaurantID.map((product) => (
-            <ProductCard
-              product={product}
-              key={product.ID}
-              deleteProduct={handleProductDelete}
-              editProduct={openEditDialog}
-              toggleStatus={toggleStatus}
-            />
-          ))}
-          <Fab
-            color="primary"
-            aria-label="add"
-            size="medium"
-            className={classes.fab}
-            onClick={openCreateDialog}
-          >
-            <Add />
-          </Fab>
-          {currentProduct && (
-            <ProductEditDialog
-              isOpen={isEditOpen}
-              closeDialog={closeEditDialog}
-              currentProduct={currentProduct}
-              updateProduct={handleProductEdit}
-            />
-          )}
-          <CreateProductDialog
-            isOpen={isCreateOpen}
-            closeDialog={closeCreateDialog}
-            createProduct={handleProductCreation}
+  return (
+    <FlexLayout>
+      <Sidebar />
+      <FlexLayout direction="vertical" className={classes.content}>
+        {data.getCurrentRestaurantOwner.restaurant.products.length === 0 && (
+          <h1>No tienes productos</h1>
+        )}
+        {data.getCurrentRestaurantOwner.restaurant.products.map((product) => (
+          <ProductCard
+            product={product}
+            key={product.ID}
+            deleteProduct={handleProductDelete}
+            editProduct={openEditDialog}
+            toggleStatus={toggleStatus}
           />
-        </FlexLayout>
+        ))}
+        <Fab
+          color="primary"
+          aria-label="add"
+          size="medium"
+          className={classes.fab}
+          onClick={openCreateDialog}
+        >
+          <Add />
+        </Fab>
+        {currentProduct && (
+          <ProductEditDialog
+            isOpen={isEditOpen}
+            closeDialog={closeEditDialog}
+            currentProduct={currentProduct}
+            updateProduct={handleProductEdit}
+          />
+        )}
+        <CreateProductDialog
+          isOpen={isCreateOpen}
+          closeDialog={closeCreateDialog}
+          createProduct={handleProductCreation}
+        />
       </FlexLayout>
-    );
-  }
-
-  return <LoadingPage />;
+    </FlexLayout>
+  );
 }
 
 export default Menu;

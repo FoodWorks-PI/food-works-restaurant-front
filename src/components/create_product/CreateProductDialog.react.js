@@ -15,17 +15,17 @@ import {
   Typography,
   TextField,
 } from '@material-ui/core';
-import {AddCircleRounded, RemoveCircleRounded} from '@material-ui/icons';
 import {makeStyles} from '@material-ui/core/styles';
 
 import Alert from 'components/shared/Alert.react';
 import TextInput from 'components/shared/TextInput.react';
 import Button from 'components/shared/Button.react';
 import FlexLayout from 'components/shared/FlexLayout.react';
+import TagAutoComplete from 'components/shared/TagAutoComplete.react';
 
 const useStyles = makeStyles({
   input: {
-    width: '80%',
+    width: '80% !important',
     margin: '3px auto',
   },
   inputNumber: {
@@ -61,8 +61,8 @@ const initialState = {
   name: '',
   description: '',
   cost: 0,
-  tags: [''],
-  isActive: true,
+  tags: [],
+  active: true,
   restaurantID: null,
 };
 
@@ -72,25 +72,6 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
   const [alertText, setAlertText] = useState<string>('');
   const [product, setProduct] = useState(initialState);
 
-  function addField(e) {
-    e.preventDefault();
-    if (product.tags.length >= 3) {
-      setAlertText('No más de tres tags');
-      setAlert(true);
-      return;
-    }
-    let temp = product.tags.concat(['']);
-    setProduct((prevProduct) => ({...prevProduct, tags: temp}));
-  }
-
-  function removeField(e) {
-    e.preventDefault();
-    if (product.tags.length > 1) {
-      let temp = product.tags.slice(0, -1);
-      setProduct((prevProduct) => ({...prevProduct, tags: temp}));
-    }
-  }
-
   function handleChange(e: SyntheticInputEvent<>) {
     const name: string = e.target.name;
     const value = e.target.type === 'checkbox' ? e.target.checked : e.target.value;
@@ -99,15 +80,13 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
       [name]: value,
     }));
   }
-  function arrayChange(e, ndx) {
-    const {name, value} = e.target;
-    let tags = [...product[name]];
-    tags[ndx] = value;
-    setProduct((prevProduct) => ({...prevProduct, [name]: tags}));
+  function handleTags(newTags: string[]) {
+    setProduct((prevProduct) => ({...prevProduct, tags: newTags}));
   }
 
   function handleSubmit() {
-    const valid = Object.values(product).every((v) => v !== '');
+    const valid =
+      Object.values(product).every((v) => v !== '') && product.tags.length > 0;
     if (!valid) {
       setAlertText('Llena todos los campos');
       setAlert(true);
@@ -175,9 +154,9 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
               <FormControlLabel
                 control={
                   <Checkbox
-                    checked={product.isActive}
+                    checked={product.active}
                     onChange={handleChange}
-                    name="isActive"
+                    name="active"
                     color="primary"
                   />
                 }
@@ -186,24 +165,11 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
             </FlexLayout>
           </FlexLayout>
         </FlexLayout>
-        <FlexLayout direction="vertical" className={classes.input}>
-          <FlexLayout>
-            <Typography>Ingresa categorías para tu producto</Typography>
-            <AddCircleRounded color="primary" onClick={addField} />
-            <RemoveCircleRounded color="secondary" onClick={removeField} />
-          </FlexLayout>
-          {product.tags.map((tag, ndx) => (
-            <TextInput
-              key={ndx}
-              label="Tag"
-              type="text"
-              name="tags"
-              value={tag}
-              onChange={(e) => arrayChange(e, ndx)}
-              placeholder="Mexicana"
-            />
-          ))}
-        </FlexLayout>
+        <TagAutoComplete
+          tags={product.tags}
+          setTags={handleTags}
+          className={classes.input}
+        />
       </DialogContent>
       <DialogActions className={classes.buttons}>
         <Button onClick={handleSubmit}>Crear</Button>

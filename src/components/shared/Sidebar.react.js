@@ -62,7 +62,7 @@ const items = [
   {
     name: 'Inicio',
     icon: Home,
-    route: '/restaurant/protected/dashboard',
+    route: '/restaurant/protected',
   },
   {
     name: 'Menú',
@@ -80,7 +80,7 @@ function Sidebar(): Node {
   const location = useLocation();
   const classes = useStyles();
 
-  function isActive(route: string) {
+  function isRouteActive(route: string) {
     return location.pathname === route;
   }
 
@@ -106,7 +106,7 @@ function Sidebar(): Node {
                 button
                 to={item.route}
                 component={NavLink}
-                selected={isActive(item.route)}
+                selected={isRouteActive(item.route)}
               >
                 <ListItemIcon className={classes.icon}>
                   <item.icon />
@@ -137,7 +137,7 @@ function Sidebar(): Node {
                 button
                 to={item.route}
                 component={NavLink}
-                selected={isActive(item.route)}
+                selected={isRouteActive(item.route)}
               >
                 <ListItemIcon className={classes.icon}>
                   <item.icon />

@@ -7,7 +7,6 @@ export const GET_CURRENT_OWNER = gql`
     getCurrentRestaurantOwner {
       ID
       name
-      email
       restaurant {
         ID
         name
@@ -17,14 +16,50 @@ export const GET_CURRENT_OWNER = gql`
 `;
 
 export const GET_ALL_RESTAURANT_PRODUCTS = gql`
-  query getAllProducts($input: ProductsFilterByRestaurantInput!) {
-    getProductsByRestaurantID(input: $input) {
+  query getProducts {
+    getCurrentRestaurantOwner {
+      restaurant {
+        ID
+        products {
+          ID
+          name
+          description
+          active
+          tags
+          cost
+        }
+      }
+    }
+  }
+`;
+
+export const GET_CURRENT_COMPLETE_OWNER = gql`
+  query getFullOwner {
+    getCurrentRestaurantOwner {
       ID
       name
-      description
-      tags
-      isActive
-      cost
+      email
+      phone
+      restaurant {
+        ID
+        name
+        description
+        tags
+        address {
+          latitude
+          longitude
+          streetLine
+        }
+        products {
+          name
+        }
+      }
     }
+  }
+`;
+
+export const TAG_AUTOCOMPLETE = gql`
+  query getTags($input: String!) {
+    autoCompleteTag(input: $input)
   }
 `;
