@@ -93,7 +93,8 @@ function AccountEditRestaurantForm({
         longitude: position?.coords?.longitude,
       }));
     }
-    const valid = Object.values(restaurant).every((v) => v !== '');
+    const valid =
+      Object.values(restaurant).every((v) => v !== '') && restaurant.tags.length > 0;
     if (valid) {
       editRestaurant(restaurant);
     } else {

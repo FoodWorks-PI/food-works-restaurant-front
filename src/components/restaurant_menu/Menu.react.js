@@ -83,8 +83,6 @@ function Menu(): Node {
       });
   }
   function handleProductEdit(product: Product) {
-    //Change to cents
-    product.cost = parseInt(product.cost * 100);
     updateProduct({
       variables: {
         input: {
@@ -99,7 +97,7 @@ function Menu(): Node {
     })
       .then((result) => {
         console.log(result);
-        setEditOpen(false);
+        closeEditDialog();
         refetch();
       })
       .catch((error) => {
