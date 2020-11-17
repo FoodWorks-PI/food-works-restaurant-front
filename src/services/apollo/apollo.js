@@ -3,6 +3,6 @@
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 
 export const apiClient = new ApolloClient({
-  uri: 'https://127.0.0.1:4455/api/graphql',
+  uri: `${process.env.REACT_APP_FOODWORKS_BASE_URL}/api/graphql`,
   cache: new InMemoryCache(),
 });

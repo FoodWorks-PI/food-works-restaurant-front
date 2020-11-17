@@ -71,7 +71,7 @@ function Landing(): Node {
         <FlexLayout justify="evenly" className={classes.buttons}>
           <Button onClick={(e) => console.log(e)}>
             <a
-              href="https://127.0.0.1:4455/auth/registration?clientApp=https://127.0.1:4455/restaurant/protected"
+              href={`${process.env.REACT_APP_FOODWORKS_BASE_URL}/auth/registration?clientApp=${process.env.REACT_APP_FOODWORKS_BASE_URL}/restaurant/protected`}
               className={classes.anchor}
             >
               Regístrate
@@ -79,7 +79,7 @@ function Landing(): Node {
           </Button>
           <Button onClick={(e) => console.log(e)}>
             <a
-              href="https://127.0.0.1:4455/auth/login?clientApp=https://127.0.0.1:4455/restaurant/protected"
+              href={`${process.env.REACT_APP_FOODWORKS_BASE_URL}/auth/login?clientApp=${process.env.REACT_APP_FOODWORKS_BASE_URL}/restaurant/protected`}
               className={classes.anchor}
             >
               Inicia Sesión
