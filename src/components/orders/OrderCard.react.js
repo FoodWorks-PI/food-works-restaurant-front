@@ -105,7 +105,7 @@ function OrderCard({order, updateOrder}: Props): Node {
       <FlexLayout direction="vertical" className={classes.content}>
         <FlexLayout justify="between" align="center" className={classes.titleRow}>
           <Typography variant="h5">{order.customer.name}</Typography>
-          <Typography variant="subtitle1">19:50</Typography>
+          <Typography variant="subtitle1">#{order.ID}</Typography>
         </FlexLayout>
         <FlexLayout className={classes.fullRow} direction="vertical">
           <Typography variant="subtitle2">
