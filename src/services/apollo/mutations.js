@@ -43,3 +43,9 @@ export const UPDATE_OWNER = gql`
     updateRestaurantOwnerProfile(input: $input)
   }
 `;
+
+export const UPDATE_ORDER = gql`
+  mutation UpdateOrder($input: UpdateOrderInput!) {
+    updateOrder(input: $input)
+  }
+`;
