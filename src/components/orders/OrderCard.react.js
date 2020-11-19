@@ -51,19 +51,20 @@ const useStyles = makeStyles((theme) => ({
 
 type Props = {
   order: Order,
+  updateOrder: (id: number, state: string) => void,
 };
 
-function OrderCard({order}: Props): Node {
+function OrderCard({order, updateOrder}: Props): Node {
   const classes = useStyles();
 
   function handleComplete() {
-    console.log('OCMPLETE');
+    updateOrder(order.ID, 'COMPLETED');
   }
   function handleCancel() {
-    console.log('CANCEL');
+    updateOrder(order.ID, 'CANCELLED');
   }
 
-  function getButtons() {
+  function getButtons(): Node | null {
     switch (order.orderState) {
       case 'COMPLETED':
         return (

@@ -1,12 +1,11 @@
 // @flow strict
 
 import type {Node} from 'react';
-import type {Owner, Order} from 'constants/ResourcesTypes';
+import type {Order} from 'constants/ResourcesTypes';
 
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
-import {Typography} from '@material-ui/core';
 
 import ErrorPage from 'components/shared/ErrorPage.react';
 import Sidebar from 'components/shared/Sidebar.react';
@@ -14,8 +13,9 @@ import FlexLayout from 'components/shared/FlexLayout.react';
 import LoadingPage from 'components/shared/LoadingPage.react';
 import OrderRow from 'components/orders/OrderRow.react';
 
-import {useQuery} from '@apollo/client';
+import {useQuery, useMutation} from '@apollo/client';
 import {GET_ORDERS} from 'services/apollo/queries';
+import {UPDATE_ORDER} from 'services/apollo/mutations';
 
 const useStyles = makeStyles({
   root: {
@@ -36,7 +36,11 @@ const useStyles = makeStyles({
 
 function Dashboard(): Node {
   const classes = useStyles();
-  const {data, loading, error} = useQuery(GET_ORDERS);
+  const {data, loading, error, refetch} = useQuery(GET_ORDERS, {
+    fetchPolicy: 'cache-and-network',
+    pollInterval: 10000,
+  });
+  const [updateOrder] = useMutation(UPDATE_ORDER);
 
   if (loading) return <LoadingPage />;
 
@@ -45,25 +49,47 @@ function Dashboard(): Node {
     return <ErrorPage>Error con la API</ErrorPage>;
   }
 
+  function handleUpdate(id: number, state: string) {
+    console.log(id, state);
+    updateOrder({
+      variables: {
+        input: {
+          orderID: id,
+          orderState: state,
+        },
+      },
+    })
+      .then((result) => {
+        refetch();
+      })
+      .catch((error) => console.log(error));
+  }
+
   const activeOrders: Order[] = data.getRestaurantOrders.filter(
     (order) =>
       order.orderState !== 'COMPLETED' &&
       order.orderState !== 'CANCELLED' &&
       order.orderState !== 'ERROR',
   );
+  activeOrders.sort((a, b) => b.updatedAt - a.updatedAt);
   const pastOrders: Order[] = data.getRestaurantOrders.filter(
     (order) =>
       order.orderState !== 'PENDING_PAYMENT' &&
       order.orderState !== 'PAID' &&
       order.orderState !== 'ERROR',
   );
-  console.log(activeOrders);
+  pastOrders.sort((a, b) => b.updatedAt - a.updatedAt);
+
   return (
     <FlexLayout>
       <Sidebar />
       <FlexLayout direction="vertical" className={classes.content}>
-        <OrderRow orders={activeOrders}>Ordenes Activas</OrderRow>
-        <OrderRow orders={pastOrders}>Ordenes Pasadas</OrderRow>
+        <OrderRow orders={activeOrders} updateOrder={handleUpdate}>
+          Ordenes Activas
+        </OrderRow>
+        <OrderRow orders={pastOrders} updateOrder={handleUpdate}>
+          Ordenes Pasadas
+        </OrderRow>
       </FlexLayout>
     </FlexLayout>
   );

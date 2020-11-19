@@ -18,7 +18,6 @@ const useStyles = makeStyles((theme) => ({
     overflowX: 'auto',
     padding: '5px 0 5px 0',
     margin: '10px 0 10px 0',
-    whiteSpace: 'nowrap',
     '&::-webkit-scrollbar': {
       height: 10,
       borderRadius: 12,
@@ -38,10 +37,12 @@ const useStyles = makeStyles((theme) => ({
 type Props = {
   orders: Order[],
   children: Node,
+  updateOrder: (id: number, state: string) => void,
 };
 
-function OrderRow({orders, children}: Props): Node {
+function OrderRow({orders, children, updateOrder}: Props): Node {
   const classes = useStyles();
+  console.log(orders);
   return (
     <>
       <Typography variant="h4" color="primary">
@@ -54,7 +55,7 @@ function OrderRow({orders, children}: Props): Node {
       )}
       <FlexLayout direction="horizontal" align="stretch" className={classes.root}>
         {orders.map((order) => (
-          <OrderCard order={order} key={order.ID} />
+          <OrderCard order={order} key={order.ID} updateOrder={updateOrder} />
         ))}
       </FlexLayout>
     </>
