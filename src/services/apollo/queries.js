@@ -23,6 +23,7 @@ export const GET_ALL_RESTAURANT_PRODUCTS = gql`
         products {
           ID
           name
+          image
           description
           active
           tags
@@ -45,13 +46,17 @@ export const GET_CURRENT_COMPLETE_OWNER = gql`
         name
         description
         tags
+        image
         address {
           latitude
           longitude
           streetLine
         }
         products {
-          name
+          ID
+        }
+        orders {
+          ID
         }
       }
     }

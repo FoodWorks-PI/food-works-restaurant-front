@@ -6,7 +6,6 @@ import type {Owner, Restaurant, OwnerProfile} from 'constants/ResourcesTypes';
 import React, {useState} from 'react';
 
 import {makeStyles} from '@material-ui/core/styles';
-// import {Typography} from '@material-ui/core';
 
 import Alert from 'components/shared/Alert.react';
 import Sidebar from 'components/shared/Sidebar.react';
@@ -18,7 +17,11 @@ import LoadingPage from 'components/shared/LoadingPage.react';
 
 import {useQuery, useMutation} from '@apollo/client';
 import {GET_CURRENT_COMPLETE_OWNER} from 'services/apollo/queries';
-import {UPDATE_RESTAURANT, UPDATE_OWNER} from 'services/apollo/mutations';
+import {
+  UPDATE_RESTAURANT,
+  UPDATE_OWNER,
+  UPLOAD_RESTAURANT_IMAGE,
+} from 'services/apollo/mutations';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -55,6 +58,7 @@ function AccountPage(): Node {
   const {loading, error, data, refetch} = useQuery(GET_CURRENT_COMPLETE_OWNER);
   const [updateRestaurant] = useMutation(UPDATE_RESTAURANT);
   const [updateOwner] = useMutation(UPDATE_OWNER);
+  const [uploadImage] = useMutation(UPLOAD_RESTAURANT_IMAGE);
 
   if (loading) return <LoadingPage />;
   if (error) return <ErrorPage>Error con la API</ErrorPage>;
@@ -130,51 +134,82 @@ function AccountPage(): Node {
       });
   }
 
-  if (data) {
-    const ownerData: Owner = data.getCurrentRestaurantOwner;
-    const currentOwner = {
-      ID: ownerData.ID,
-      name: ownerData.name,
-      lastName: 'Perez',
-      email: ownerData.email,
-      phone: ownerData.phone,
-    };
-    const currentRestaurant = {
-      ID: ownerData.restaurant.ID,
-      name: ownerData.restaurant.name,
-      description: ownerData.restaurant.description,
-      tags: ownerData.restaurant.tags,
-      address: ownerData.restaurant.address,
-      products: ownerData.restaurant.products,
-    };
-    return (
-      <FlexLayout>
-        <Sidebar />
-        <FlexLayout className={classes.content}>
-          <AccountSidePanel restaurant={currentRestaurant} />
-          <FlexLayout direction="vertical" className={classes.mainPanel}>
-            <Alert
-              severity={alertType}
-              open={alertOpen}
-              setOpen={setAlert}
-              className={classes.alert}
-            >
-              {alertText}
-            </Alert>
-            <AccountMainPanel
-              restaurant={currentRestaurant}
-              editRestaurant={handleRestaurantEdit}
-              owner={currentOwner}
-              editOwner={handleOwnerEdit}
-              setAlertState={setAlertState}
-            />
-          </FlexLayout>
+  function handleImageUpload(file: File, ID: number) {
+    console.log(file);
+    uploadImage({
+      variables: {
+        input: {
+          ID: ID,
+          file: file,
+        },
+      },
+    })
+      .then((result) => {
+        console.log(result);
+        setAlertState({
+          isOpen: true,
+          text: 'Imagen agregada',
+          type: 'success',
+        });
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error);
+        setAlertState({
+          isOpen: true,
+          text: 'Error al agregar imagen',
+          type: 'error',
+        });
+        refetch();
+      });
+  }
+
+  const ownerData: Owner = data.getCurrentRestaurantOwner;
+  const currentOwner = {
+    ID: ownerData.ID,
+    name: ownerData.name,
+    lastName: ownerData.lastName,
+    email: ownerData.email,
+    phone: ownerData.phone,
+  };
+  const currentRestaurant = {
+    ID: ownerData.restaurant.ID,
+    name: ownerData.restaurant.name,
+    description: ownerData.restaurant.description,
+    tags: ownerData.restaurant.tags,
+    address: ownerData.restaurant.address,
+    products: ownerData.restaurant.products,
+    orders: ownerData.restaurant.orders,
+    image: ownerData.restaurant.image,
+  };
+  return (
+    <FlexLayout>
+      <Sidebar />
+      <FlexLayout className={classes.content}>
+        <AccountSidePanel
+          restaurant={currentRestaurant}
+          uploadImage={handleImageUpload}
+        />
+        <FlexLayout direction="vertical" className={classes.mainPanel}>
+          <Alert
+            severity={alertType}
+            open={alertOpen}
+            setOpen={setAlert}
+            className={classes.alert}
+          >
+            {alertText}
+          </Alert>
+          <AccountMainPanel
+            restaurant={currentRestaurant}
+            editRestaurant={handleRestaurantEdit}
+            owner={currentOwner}
+            editOwner={handleOwnerEdit}
+            setAlertState={setAlertState}
+          />
         </FlexLayout>
       </FlexLayout>
-    );
-  } else {
-    return <LoadingPage />;
-  }
+    </FlexLayout>
+  );
 }
 
 export default AccountPage;
