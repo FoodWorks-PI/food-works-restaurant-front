@@ -23,6 +23,7 @@ import {
   DELETE_PRODUCT,
   UPDATE_PRODUCT,
   NEW_PRODUCT,
+  UPLOAD_PRODUCT_IMAGE,
 } from 'services/apollo/mutations';
 
 const useStyles = makeStyles({
@@ -54,6 +55,7 @@ function Menu(): Node {
   const [deleteProduct] = useMutation(DELETE_PRODUCT);
   const [updateProduct] = useMutation(UPDATE_PRODUCT);
   const [createProduct] = useMutation(NEW_PRODUCT);
+  const [uploadImage] = useMutation(UPLOAD_PRODUCT_IMAGE);
 
   useEffect(() => {
     if (data) {
@@ -128,6 +130,23 @@ function Menu(): Node {
         console.log(error);
       });
   }
+  function handleImageUpload(file: File, ID: number) {
+    uploadImage({
+      variables: {
+        input: {
+          ID: ID,
+          file: file,
+        },
+      },
+    })
+      .then((result) => {
+        console.log(result);
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }
   function toggleStatus(ID: number) {
     toggleProductStatus({
       variables: {
@@ -152,6 +171,7 @@ function Menu(): Node {
       active: product.active,
       cost: product.cost / 100,
       tags: product.tags,
+      image: '',
     };
     setProduct(formattedProduct);
     setEditOpen(true);
@@ -182,6 +202,7 @@ function Menu(): Node {
             deleteProduct={handleProductDelete}
             editProduct={openEditDialog}
             toggleStatus={toggleStatus}
+            uploadImage={handleImageUpload}
           />
         ))}
         <Fab

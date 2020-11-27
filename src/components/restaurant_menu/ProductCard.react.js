@@ -3,14 +3,17 @@
 import type {Node} from 'react';
 import type {Product} from 'constants/ResourcesTypes';
 
-import React from 'react';
+import React, {useState} from 'react';
 import {makeStyles} from '@material-ui/core/styles';
 
 import {Typography, Paper, Chip, Checkbox, FormControlLabel} from '@material-ui/core';
+
 import FlexLayout from 'components/shared/FlexLayout.react';
 import Button from 'components/shared/Button.react';
+import FileInput from 'components/shared/FileInput.react';
+import placeholderImg from 'assets/placeholder.png';
 
-import donuts from 'assets/placeholder.png';
+import {BASE_URL} from 'constants/ResourcesTypes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -21,6 +24,7 @@ const useStyles = makeStyles((theme) => ({
     flex: '0 0 33.333%',
     height: 200,
     backgroundRepeat: 'no-repeat',
+    backgroundPosition: 'center',
     backgroundSize: 'cover',
     backgroundImage: `url(${img})`,
   }),
@@ -65,10 +69,21 @@ type Props = {
   deleteProduct: (ID: number) => mixed,
   toggleStatus: (ID: number) => void,
   editProduct: (product: Product) => void,
+  uploadImage: (file: File, ID: number) => void,
 };
 
-function ProductCard({product, deleteProduct, toggleStatus, editProduct}: Props): Node {
-  const img = donuts;
+function ProductCard({
+  product,
+  deleteProduct,
+  toggleStatus,
+  editProduct,
+  uploadImage,
+}: Props): Node {
+  const [fileURL, setFileURL] = useState(() => {
+    return product.image !== '' ? `${BASE_URL}/${product.image}` : placeholderImg;
+  });
+  const [file, setFile] = useState<?File>(null);
+  const img = fileURL ? fileURL : placeholderImg;
   const classes = useStyles({img});
 
   function handleDelete(e: SyntheticMouseEvent<>) {
@@ -85,10 +100,36 @@ function ProductCard({product, deleteProduct, toggleStatus, editProduct}: Props)
     editProduct(product);
   }
 
+  function handleInputChange(inputFile: File, inputURL: string) {
+    setFileURL(inputURL);
+    setFile(inputFile);
+  }
+  function handleImageUpload() {
+    if (file) {
+      uploadImage(file, product.ID);
+      setFile(null);
+    } else {
+      window.alert('Selecciona un archivo');
+    }
+  }
+  function handleImageCancel() {
+    const newImg = product.image ? product.image : placeholderImg;
+    setFileURL(newImg);
+    setFile(null);
+  }
+
   return (
     <Paper elevation={3} className={classes.root} square>
       <FlexLayout wrap="wrap" align="stretch">
-        <FlexLayout className={classes.img}></FlexLayout>
+        <FlexLayout className={classes.img}>
+          <FileInput
+            fileChange={handleInputChange}
+            cancelImage={handleImageCancel}
+            uploadImage={handleImageUpload}
+            file={file}
+            id={product.ID}
+          />
+        </FlexLayout>
         <FlexLayout className={classes.content} direction="vertical">
           <Typography variant="h4" className={classes.title}>
             {product.name}

@@ -7,6 +7,7 @@ export type Product = {
   active: boolean,
   cost: number,
   tags: string[],
+  image: string,
 };
 
 export type NewProduct = {
@@ -24,6 +25,17 @@ export type Address = {
   streetLine: string,
 };
 
+export type Order = {
+  ID: number,
+  quantity: number,
+  updatedAt: number,
+  orderState: string,
+  product: Product,
+  customer: {
+    name: string,
+  },
+};
+
 export type Restaurant = {
   ID: number,
   name: string,
@@ -31,6 +43,8 @@ export type Restaurant = {
   tags: string[],
   address: Address,
   products: Product[],
+  orders: Order[],
+  image: string,
 };
 
 export type Owner = {
@@ -50,13 +64,4 @@ export type OwnerProfile = {
   phone: string,
 };
 
-export type Order = {
-  ID: number,
-  quantity: number,
-  updatedAt: number,
-  orderState: string,
-  product: Product,
-  customer: {
-    name: string,
-  },
-};
+export const BASE_URL = 'https://127.0.0.1:4455/api/media';

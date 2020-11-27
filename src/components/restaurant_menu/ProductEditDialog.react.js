@@ -162,7 +162,11 @@ function ProductEditDialog({
             </FlexLayout>
           </FlexLayout>
         </FlexLayout>
-        <TagAutoComplete tags={product.tags} setTags={handleTags} />
+        <TagAutoComplete
+          tags={product.tags}
+          setTags={handleTags}
+          className={classes.input}
+        />
       </DialogContent>
       <DialogActions className={classes.buttons}>
         <Button onClick={handleSubmit}>Actualizar</Button>

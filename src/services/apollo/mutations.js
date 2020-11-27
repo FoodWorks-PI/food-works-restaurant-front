@@ -49,3 +49,15 @@ export const UPDATE_ORDER = gql`
     updateOrder(input: $input)
   }
 `;
+
+export const UPLOAD_PRODUCT_IMAGE = gql`
+  mutation uploadProductImage($input: UploadProductImageInput!) {
+    uploadProductPhoto(input: $input)
+  }
+`;
+
+export const UPLOAD_RESTAURANT_IMAGE = gql`
+  mutation uploadRestaurantImage($input: UploadRestaurantImageInput!) {
+    uploadRestaurantPhoto(input: $input)
+  }
+`;

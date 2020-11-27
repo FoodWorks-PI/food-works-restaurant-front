@@ -92,6 +92,7 @@ function CreateProductDialog({isOpen, closeDialog, createProduct}: Props): Node 
       setAlert(true);
       return;
     } else {
+      setProduct(initialState);
       createProduct(product);
     }
   }
