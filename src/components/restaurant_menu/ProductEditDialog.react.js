@@ -106,12 +106,10 @@ function ProductEditDialog({
       <Alert severity="warning" open={alertOpen} setOpen={setAlert}>
         {alertText}
       </Alert>
-      <DialogTitle id="form-dialog-title">
-        Agrega un nuevo producto a tu menú
-      </DialogTitle>
+      <DialogTitle id="form-dialog-title">Edita tu producto</DialogTitle>
       <DialogContent className={classes.content}>
         <DialogContentText>
-          Llena los datos para agregar un nuevo producto a tu restaurante
+          Llena los datos para actualizar tu producto
         </DialogContentText>
         <TextInput
           className={classes.input}
