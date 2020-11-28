@@ -64,4 +64,4 @@ export type OwnerProfile = {
   phone: string,
 };
 
-export const BASE_URL = 'https://127.0.0.1:4455/api/media';
+export const BASE_URL = `${process.env.REACT_APP_FOODWORKS_BASE_URL}/api/media`;
