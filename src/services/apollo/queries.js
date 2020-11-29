@@ -23,6 +23,7 @@ export const GET_ALL_RESTAURANT_PRODUCTS = gql`
         products {
           ID
           name
+          image
           description
           active
           tags
@@ -45,13 +46,17 @@ export const GET_CURRENT_COMPLETE_OWNER = gql`
         name
         description
         tags
+        image
         address {
           latitude
           longitude
           streetLine
         }
         products {
-          name
+          ID
+        }
+        orders {
+          ID
         }
       }
     }
@@ -61,5 +66,23 @@ export const GET_CURRENT_COMPLETE_OWNER = gql`
 export const TAG_AUTOCOMPLETE = gql`
   query getTags($input: String!) {
     autoCompleteTag(input: $input)
+  }
+`;
+
+export const GET_ORDERS = gql`
+  query getOrders {
+    getRestaurantOrders {
+      ID
+      quantity
+      orderState
+      updatedAt
+      product {
+        name
+        cost
+      }
+      customer {
+        name
+      }
+    }
   }
 `;

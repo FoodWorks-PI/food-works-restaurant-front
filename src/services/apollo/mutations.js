@@ -43,3 +43,21 @@ export const UPDATE_OWNER = gql`
     updateRestaurantOwnerProfile(input: $input)
   }
 `;
+
+export const UPDATE_ORDER = gql`
+  mutation UpdateOrder($input: UpdateOrderInput!) {
+    updateOrder(input: $input)
+  }
+`;
+
+export const UPLOAD_PRODUCT_IMAGE = gql`
+  mutation uploadProductImage($input: UploadProductImageInput!) {
+    uploadProductPhoto(input: $input)
+  }
+`;
+
+export const UPLOAD_RESTAURANT_IMAGE = gql`
+  mutation uploadRestaurantImage($input: UploadRestaurantImageInput!) {
+    uploadRestaurantPhoto(input: $input)
+  }
+`;

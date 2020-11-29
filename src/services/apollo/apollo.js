@@ -1,8 +1,9 @@
 // @flow strict
 
 import {ApolloClient, InMemoryCache} from '@apollo/client';
+import {createUploadLink} from 'apollo-upload-client';
 
 export const apiClient = new ApolloClient({
-  uri: `${process.env.REACT_APP_FOODWORKS_BASE_URL}/api/graphql`,
   cache: new InMemoryCache(),
+  link: createUploadLink({uri: `${process.env.REACT_APP_FOODWORKS_BASE_URL}/api/graphql`}),
 });

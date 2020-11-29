@@ -41,11 +41,6 @@ function App(): Node {
                   <Dashboard />
                 </RestaurantCreatedRedirect>
               </Route>
-              <Route path="/restaurant/protected/dashboard">
-                <RestaurantCreatedRedirect>
-                  <Dashboard />
-                </RestaurantCreatedRedirect>
-              </Route>
               <Route path="/restaurant/protected/products">
                 <RestaurantCreatedRedirect>
                   <Menu />
