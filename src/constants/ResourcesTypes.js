@@ -1,4 +1,5 @@
 // @flow strict
+import BASE_URL from '../services/config';
 
 export type Product = {
   ID: number,
@@ -64,4 +65,4 @@ export type OwnerProfile = {
   phone: string,
 };
 
-export const BASE_URL = `${process.env.REACT_APP_FOODWORKS_BASE_URL}/api/media`;
+export const BASE_MEDIA_URL = `${BASE_URL}/api/media`;
