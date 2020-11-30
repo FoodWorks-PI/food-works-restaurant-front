@@ -35,7 +35,6 @@ jobs:
       run: npm ci
     - name: Build
       run: |
-            echo $PUBLIC_URL
             npm run build --if-present
       env: 
         PUBLIC_URL: ${{secrets.AWS_CLOUDFRONT_RESTAURANT}}
