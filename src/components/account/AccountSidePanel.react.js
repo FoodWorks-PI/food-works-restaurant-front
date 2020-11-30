@@ -21,7 +21,7 @@ import FlexLayout from 'components/shared/FlexLayout.react';
 import FileInput from 'components/shared/FileInput.react';
 
 import placeholderImg from 'assets/placeholder.png';
-import {BASE_URL} from 'constants/ResourcesTypes';
+import {BASE_MEDIA_URL} from 'constants/ResourcesTypes';
 
 const useStyles = makeStyles({
   root: {
@@ -51,7 +51,7 @@ type Props = {
 function AccountSidePanel({restaurant, uploadImage}: Props): Node {
   const classes = useStyles();
   const [fileURL, setFileURL] = useState(() => {
-    return restaurant.image !== '' ? `${BASE_URL}/${restaurant.image}` : placeholderImg;
+    return restaurant.image !== '' ? `${BASE_MEDIA_URL}/${restaurant.image}` : placeholderImg;
   });
   const [file, setFile] = useState<?File>(null);
 
@@ -72,7 +72,7 @@ function AccountSidePanel({restaurant, uploadImage}: Props): Node {
     }
   }
   function handleImageCancel() {
-    const newImg = restaurant.image ? `${BASE_URL}/${restaurant.image}` : placeholderImg;
+    const newImg = restaurant.image ? `${BASE_MEDIA_URL}/${restaurant.image}` : placeholderImg;
     setFileURL(newImg);
     setFile(null);
   }

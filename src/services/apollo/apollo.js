@@ -2,8 +2,11 @@
 
 import {ApolloClient, InMemoryCache} from '@apollo/client';
 import {createUploadLink} from 'apollo-upload-client';
+import BASE_URL from 'services/config';
 
 export const apiClient = new ApolloClient({
   cache: new InMemoryCache(),
-  link: createUploadLink({uri: 'https://127.0.0.1:4455/api/graphql'}),
+  link: createUploadLink({
+  uri: `${BASE_URL}/api/graphql`,
+  }),
 });

@@ -1,0 +1,55 @@
+name: Build
+
+on: 
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+  push:
+    branches:
+      - seugal/*
+      - seugal/Build
+
+jobs:
+  build-deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-version: [12.x]
+    steps:
+    - uses: actions/checkout@v2
+    - name: Use Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v1
+      with:
+        node-version: ${{ matrix.node-version }}
+    - name: Cache Node.js modules
+      uses: actions/cache@v2
+      with:
+        # npm cache files are stored in `~/.npm` on Linux/macOS
+        path: ~/.npm 
+        key: ${{ runner.OS }}-node-${{ hashFiles('**/package-lock.json') }}
+        restore-keys: |
+          ${{ runner.OS }}-node-
+          ${{ runner.OS }}-
+    - name: Install dependencies
+      run: npm ci
+    - name: Build
+      run: |
+            npm run build --if-present
+      env: 
+        PUBLIC_URL: ${{secrets.AWS_CLOUDFRONT_RESTAURANT}}
+        REACT_APP_FOODWORKS_BASE_URL: ${{secrets.FOODWORKS_BASE_URL}}
+    - name: Output
+      run: |
+          echo ${{secrets.AWS_CLOUDFRONT_RESTAURANT}}
+          echo ${{secrets.FOODWORKS_BASE_URL}}
+    - name: Sync S3
+      uses: jakejarvis/s3-sync-action@master
+      with: 
+        args: --delete
+      env:
+        AWS_S3_BUCKET: ${{ secrets.AWS_S3_RESTAURANT_BUCKET }}
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-2'   # optional: defaults to us-east-2
+        SOURCE_DIR: 'build'      # optional: defaults to entire repository

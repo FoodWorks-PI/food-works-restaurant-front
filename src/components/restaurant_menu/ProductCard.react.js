@@ -13,7 +13,7 @@ import Button from 'components/shared/Button.react';
 import FileInput from 'components/shared/FileInput.react';
 import placeholderImg from 'assets/placeholder.png';
 
-import {BASE_URL} from 'constants/ResourcesTypes';
+import {BASE_MEDIA_URL} from 'constants/ResourcesTypes';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -80,7 +80,7 @@ function ProductCard({
   uploadImage,
 }: Props): Node {
   const [fileURL, setFileURL] = useState(() => {
-    return product.image !== '' ? `${BASE_URL}/${product.image}` : placeholderImg;
+    return product.image !== '' ? `${BASE_MEDIA_URL}/${product.image}` : placeholderImg;
   });
   const [file, setFile] = useState<?File>(null);
   const img = fileURL ? fileURL : placeholderImg;
